@@ -1,4 +1,14 @@
 - material:
+    id: MAT_024
+    mat: MAT_PIECEWISE_LINEAR_PLASTICITY_STOCHASTIC
+    app:
+      - HAZ effect
+      - Aluminium
+      - STOCHASTIC
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/define_haz_properties.k"
+
+- material:
     id: MAT_015
     mat: MAT_JOHNSON_COOK
     mat_add: MAT_ADD_THERMAL_EXPANSION
