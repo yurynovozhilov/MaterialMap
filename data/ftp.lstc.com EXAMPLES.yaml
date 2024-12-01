@@ -1,81 +1,104 @@
 - material:
+    id: MAT_015
+    mat: MAT_JOHNSON_COOK
+    mat_add: MAT_ADD_THERMAL_EXPANSION
+    mat_thermal: MAT_THERMAL_ISOTROPIC
+    app:
+      - Ti6Al4V 
+      - Titanium
+      - Metal cutting with SPG
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/cable_preload_via_dr2.k"
+
+- material:
+    id: MAT_071
+    mat: MAT_CABLE_DISCRETE_BEAM
+    app:
+      - Dynamic Relaxation Cable Preload Test
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/cable_preload_via_dr2.k"
+
+- material:
+    id: MAT_186
+    mat: MAT_COHESIVE_GENERAL
+    app:
+      - Adhesive sample
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/compare_cohesive_to_tiebreak_from_tobias.k"
+
+- material:
+    id: MAT_138
+    mat: MAT_COHESIVE_MIXED_MODE
+    app:
+      - Adhesive sample
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/compare_cohesive_to_tiebreak_from_tobias.k"
+
+- material:
+    id: MAT_185
+    mat: MAT_COHESIVE_TH
+    app:
+      - Adhesive sample
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/compare_cohesive_to_tiebreak_from_tobias.k"
+
+- material:
     id: MAT_115
     mat: MAT_UNIFIED_CREEP
-    mat_data: |
-      The material model as part of the LS-DYNA model can be found at the following link
     app:
-      - anisotropic composite material
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat115_brick.k"
+      - Anisotropic composite material sample
     add: 2024-11-29
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat115_brick.k"
 
 - material:
     id: MAT_215
     mat: MAT_4A_MICROMEC
-    mat_data: |
-      The material model as part of the LS-DYNA model can be found at the following link
     app:
-      - anisotropic composite material
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/TESTING_MAT215.zip"
+      - Anisotropic composite material sample
     add: 2024-11-29
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/TESTING_MAT215.zip"
 
 - material:
     id: MAT_077_H
     mat: MAT_HYPERELASTIC_RUBBER
-    mat_data: |
-      The material model as part of the LS-DYNA model can be found at the following link
     app:
-      - rubber
+      - Rubber
       - Christensen model
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat77.stiffdamping_vs_freqindepdampGandSIGF.k"
     add: 2024-11-29
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat77.stiffdamping_vs_freqindepdampGandSIGF.k"
 
 - material:
     id: MAT_077_H
     mat: MAT_OGDEN_RUBBER
-    mat_data: |
-      The material model as part of the LS-DYNA model can be found at the following link
     app:
-      - rubber
+      - Rubber
       - Odgen model
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat77_tbhys.tar"
     add: 2024-11-29
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat77_tbhys.tar"
     
 - material:
     id: MAT_293
     mat: MAT_COMPRF
-    mat_data: |
-      The material model as part of the LS-DYNA model can be found at the following link
     app:
-      - woven composites 
-      - preforming process
+      - Woven composites 
+      - Preforming process
       - CFRP
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat293.tar.gz"
     add: 2024-11-29
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat293.tar.gz"
 
 - material:
     id: MAT_258
     mat: MAT_PAPER
-    mat_data: |
-      The material model as part of the LS-DYNA model can be found at the following link
     app:
       - Paper
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat274_twoexamples.tar.gz"
     add: 2024-11-28
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat274_twoexamples.tar.gz"
 
 - material:
     id: MAT_258
     mat: MAT_NON_QUADRATIC_FAILURE
-    mat_data: |
-      The material model as part of the LS-DYNA model can be found at the following link
     app:
       - Aluminium 6005-T6
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/MAT_258_demo_material_20191029.zip"
     add: 2024-11-28
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/MAT_258_demo_material_20191029.zip"
 
@@ -83,36 +106,27 @@
 - material:
     id: MAT_280
     mat: MAT_GLASS
-    mat_data: |
-      The material model as part of the LS-DYNA model can be found at the following link
     app:
       - Glass
       - Windshield
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/yaris_windshield_mat_280_pse.tgz"
     add: 2024-11-28
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/yaris_windshield_mat_280_pse.tgz"
 
 - material:
     id: MAT_277
     mat: MAT_ADHESIVE_CURING_VISCOELASTIC
-    mat_data: |
-      The material model as part of the LS-DYNA model can be found at the following link
     app:
       - Adhesive
       - Curing
       - Prony series 
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat277_rev1.tar.gz"
     add: 2024-11-28
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat277_rev1.tar.gz"
 
 - material:
     id: MAT_271
     mat: MAT_POWDER
-    mat_data: |
-       The material model as part of the LS-DYNA model can be found at the following link
     app:
       - Powder Material
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat271.papers_and_example.tar.gz"
     add: 2024-11-24
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat271.papers_and_example.tar.gz"
 
@@ -348,22 +362,16 @@
 - material:
     id: MAT_076
     mat: MAT_GENERAL_VISCOELASTIC
-    mat_data: |
-       The material model as part of the LS-DYNA model can be found at the following link
     app:
       - Maxwell viscoelastic model
       - Prony series 
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/shear_mat76.k"
     add: 2024-11-20
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/shear_mat76.k"
 
 - material:
     id: MAT_032
     mat: MAT_LAMINATED_GLASS
-    mat_data: |
-      The material model as part of the LS-DYNA model can be found at the following link
     app:
       - Laminated glass
-    ref: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/alternate_glass_and_polymer_m32.k"
     add: 2024-11-20
     url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/alternate_glass_and_polymer_m32.k"
