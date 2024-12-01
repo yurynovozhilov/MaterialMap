@@ -79,12 +79,7 @@ async function loadMaterials() {
       }
 
       // Формируем разметку для первой колонки
-      let materialModelHTML = `
-        <div><strong>ID:</strong> ${material.id || "-"}</div>
-        <div>${material.mat || "-"}</div>
-      `;
-
-      // Добавляем MAT_ADD и ADD_THERMAL только если оно существует
+      let materialModelHTML = `<div>${material.id || "-"}/${material.mat || "-"}</div>`;
       if (material.mat_add)     {materialModelHTML += `<div>${material.mat_add}</div>`}
       if (material.mat_thermal) {materialModelHTML += `<div>${material.mat_thermal}</div>`}
 
