@@ -1,4 +1,191 @@
 - material:
+    id: MAT_270
+    mat: MAT_CWM
+    mat_thermal: MAT_THERMAL_CWM
+    app:
+      - Welding
+      - Thermo-elastic-plastic model 
+      - Kinematic hardening
+      - Computational Welding Mechanics
+      - Aluminium
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/ShellWelding.zip"
+
+- material:
+    id: MAT_004
+    mat: MAT_ELASTIC_PLASTIC_THERMAL
+    mat_thermal: MAT_THERMAL_ISOTROPIC_TD
+    app:
+      - Welding
+      - Nickel
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/weld_2_nodes_skew.k.gz"
+
+- material:
+    id: MAT_270
+    mat: MAT_CWM
+    mat_thermal: MAT_THERMAL_CWM
+    app:
+      - Welding
+      - Thermo-elastic-plastic model 
+      - Kinematic hardening
+      - Computational Welding Mechanics
+      - Steel
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/boundary_thermal_weld_mat_cwm.k.gz"
+
+- material:
+    id: MAT_004
+    mat: MAT_ELASTIC_PLASTIC_THERMAL
+    mat_thermal: MAT_THERMAL_ISOTROPIC
+    app:
+      - Material sample
+      - LS-DYNA Thermal Guide
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/ls-dyna_thermal_guide.tar.gz"
+
+- material:
+    id: MAT_001_FLUID
+    mat: MAT_ELASTIC_FLUID
+    app:
+      - Soil
+      - Pore water pressure 
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/pwp_examples.tar.gz"
+
+- material:
+    id: MAT_173
+    mat: MAT_MOHR_COULOMB
+    mat_add: MAT_ADD_PERMEABILITY
+    app:
+      - Staged construction example
+      - Soil
+      - Pore water pressure 
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/staged_construction_incl_pwp.tar"
+
+- material:
+    id: MAT_270
+    mat: MAT_CWM
+    mat_thermal: MAT_THERMAL_ISOTROPIC_TD_LC
+    app:
+      - Welding
+      - Thermo-elastic-plastic model 
+      - Kinematic hardening
+      - Computational Welding Mechanics
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/thermal_weld_trajectory.2welds.k.gz"
+
+- material:
+    id: MAT_106
+    mat: MAT_ELASTIC_VISCOPLASTIC_THERMAL 
+    app:
+      - Steel
+      - Model sample
+      - Kinematic hardening
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat106_with_table.tar"
+
+- material:
+    id: MAT_022
+    mat: MAT_COMPOSITE_DAMAGE
+    app:
+      - Composit material sample
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat2_mat22_output.k"
+
+- material:
+    id: MAT_002
+    mat: MAT_ORTHOTROPIC_ELASTIC
+    app:
+      - Composit material sample
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat2_mat22_output.k"
+
+- material:
+    id: MAT_024
+    mat: MAT_PIECEWISE_LINEAR_PLASTICITY
+    mat_add: MAT_NONLOCAL
+    app:
+      - Nonlocal failure theorie
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/demo.nonlocal_24Jan2018.tar.gz"
+
+- material:
+    id: MAT_S02
+    mat: MAT_DAMPER_VISCOUS
+    app:
+      - Element Bearing
+      - Discrete element
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/bearing14_shaft_rampup_high.rev.k"
+
+- material:
+    id: MAT_224
+    mat: MAT_TABULATED_JOHNSON_COOK
+    app:
+      - IN718
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/mat224_inittemp_newformat_rev.incl_shells.k"
+
+- material:
+    id: MAT_249
+    mat: MAT_REINFORCED_THERMOPLASTIC
+    app:
+      - Draping simulation
+      - Thermoplastic pre-pregs
+      - Fabric material 45/-45/90
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/hot_stamping_quenching_MAT_248.zip"
+
+- material:
+    id: MAT_248
+    mat: MAT_PHS_BMW
+    mat_thermal: MAT_THERMAL_ISOTROPIC_TD_LC
+    app:
+      - 22MnB5 Ultra high strength steel
+      - Hot forming
+      - Quenching
+      - Stamping
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/hot_stamping_quenching_MAT_248.zip"
+
+- material:
+    id: MAT_292A
+    mat: MAT_ELASTIC_PERI_LAMINATE
+    app:
+      - UD fiber reinforced polymer laminates
+      - Composite
+      - Peridynamics
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/pericomposite.zip"
+
+- material:
+    id: MAT_138
+    mat: MAT_COHESIVE_MIXED_MODE
+    app:
+      - Adhesive sample
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/small_mod_i.cohes138_vs_dycos_tiebreak.k"
+
+- material:
+    id: MAT_138
+    mat: MAT_COHESIVE_MIXED_MODE
+    app:
+      - Adhesive sample
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/delam_test.tar.gz"
+
+- material:
+    id: MAT_018
+    mat: MAT_POWER_LAW_PLASTICITY
+    app:
+      - Incremental forming
+      - Steel
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/incremental_forming.k.gz"
+
+- material:
     id: MAT_024
     mat: MAT_PIECEWISE_LINEAR_PLASTICITY_STOCHASTIC
     app:
@@ -146,8 +333,17 @@
     app:
       - Maxwell viscoelastic model
       - Prony series 
-    add: 2024-11-20
-    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/shear_mat76.k"
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/tension_mat76.k"
+
+- material:
+    id: MAT_076
+    mat: MAT_GENERAL_VISCOELASTIC
+    app:
+      - Maxwell viscoelastic model
+      - Prony series 
+    add: 2024-12-01
+    url: "https://ftp.lstc.com/anonymous/outgoing/support/EXAMPLES/hydro_mat76.k"
 
 - material:
     id: MAT_076
