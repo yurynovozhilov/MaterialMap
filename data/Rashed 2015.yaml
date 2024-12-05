@@ -19,8 +19,8 @@
       - Alumina 99.5%
       - Johnson-Holmquist Plasticity Damage Model
       - High speed impact
-    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
-    add: 2024-12-5
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials."
+    add: 2024-11-05
     url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
 
 - material:
@@ -59,8 +59,8 @@
       - Al5083 H116 
       - Aluminum
       - Impact simulations
-    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
-    add: 2024-12-5
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials."
+    add: 2024-11-05
     url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
 
 - material:
@@ -98,8 +98,8 @@
     app:
       - Steel 4340
       - Impact simulations
-    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
-    add: 2024-12-5
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials."
+    add: 2024-11-05
     url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
 
 - material:
@@ -137,8 +137,8 @@
     app:
       - Tungsten alloy
       - Impact simulations
-    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
-    add: 2024-12-5
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials."
+    add: 2024-11-05
     url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
 
 - material:
@@ -182,8 +182,8 @@
     app:
       - Resin epoxy 
       - Impact simulations
-    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
-    add: 2024-12-5
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials."
+    add: 2024-11-05
     url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
 
 - material:
@@ -227,8 +227,8 @@
     app:
       - Polyethylene
       - Impact simulations
-    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
-    add: 2024-12-5
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials."
+    add: 2024-11-05
     url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
 
 - material:
@@ -272,8 +272,8 @@
     app:
       - Teflon
       - Impact simulations
-    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
-    add: 2024-12-5
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials."
+    add: 2024-11-05
     url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
 
 - material:
@@ -317,8 +317,8 @@
     app:
       - Polyrubber
       - Impact simulations
-    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
-    add: 2024-12-5
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials."
+    add: 2024-11-05
     url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
 
 - material:
@@ -362,8 +362,8 @@
     app:
       - Nylon
       - Impact simulations
-    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
-    add: 2024-12-5
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials."
+    add: 2024-11-05
     url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
 
 - material:
@@ -407,6 +407,6 @@
     app:
       - Polyurethane
       - Impact simulations
-    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
-    add: 2024-12-5
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials."
+    add: 2024-11-05
     url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
