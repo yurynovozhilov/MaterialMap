@@ -1,0 +1,412 @@
+- material:
+    id: MAT_110
+    mat: MAT_JOHNSON_HOLMQUIST_CERAMICS
+    mat_data: |
+      *MAT_JOHNSON_HOLMQUIST_CERAMICS_TITLE
+      Alumina 99.5%
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO         G         A         B         C         M         N
+             110      3800     135E9     0.989      0.77       0.0       1.0     0.376
+      $#    EPS0         T     SFMAX       HEL      PHEL      BETA
+             1.0     1.5E8       0.5     5.9E9    2200E6       1.0
+      $#      D1        D2        K1        K2        K3        FS
+            0.01       1.0       0.0       0.0       0.0       1.5 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Alumina 99.5%
+      - Johnson-Holmquist Plasticity Damage Model
+      - High speed impact
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
+    add: 2024-12-5
+    url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
+
+- material:
+    id: MAT_015
+    mat: MAT_JOHNSON_COOK
+    mat_data: |
+      *MAT_JOHNSON_COOK_TITLE
+      Al5083 H116 
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO         G         E        PR       DTF        VP    RATEOP
+              15      2700   2.69E10      70E9       0.3         0         0         0
+      $#       A         B         N         C         M        TM        TR      EPS0
+          1.67E8    5.96E8     0.551     0.001     0.859       893       300         1
+      $#      CP        PC     SPALL        IT        D1        D2        D3        D4
+             910    -1.5E9                   0    0.0261     0.263    -0.349     0.247
+      $#      D5      C2/P      EROD     EFMIN    NUMINT
+            16.8         0         0         2         0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_GRUNEISEN
+    eos_data: |
+      *EOS_LINEAR_POLYNOMIAL_TITLE
+      Al5083 H116 
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID        C0        C1        C2        C3        C4        C5        C6
+               9             5.83E10 
+      $#      E0        V0
+             0.0       1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Al5083 H116 
+      - Aluminum
+      - Impact simulations
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
+    add: 2024-12-5
+    url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
+
+- material:
+    id: MAT_015
+    mat: MAT_JOHNSON_COOK
+    mat_data: |
+      *MAT_JOHNSON_COOK_TITLE
+      Steel 4340
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO         G         E        PR       DTF        VP    RATEOP
+              15      7860   8.18E10    20.9E9      0.28         0         0         0
+      $#       A         B         N         C         M        TM        TR      EPS0
+          7.92E8     5.1E8     0.260     0.014     1.030      1790       300         1
+      $#      CP        PC     SPALL        IT        D1        D2        D3        D4
+             477                             0      0.05      3.44     -2.12     0.002
+      $#      D5      C2/P      EROD     EFMIN    NUMINT
+            16.8         0         0       2.1         0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_GRUNEISEN
+    eos_data: |
+      *EOS_LINEAR_POLYNOMIAL_TITLE
+      Steel 4340
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID        C0        C1        C2        C3        C4        C5        C6
+               9             1.59E11
+      $#      E0        V0
+             0.0       1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Steel 4340
+      - Impact simulations
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
+    add: 2024-12-5
+    url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
+
+- material:
+    id: MAT_015
+    mat: MAT_JOHNSON_COOK
+    mat_data: |
+      *MAT_JOHNSON_COOK_TITLE
+      Tungsten alloy 
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO         G         E        PR       DTF        VP    RATEOP
+              15     17600    160E10                             0         0         0
+      $#       A         B         N         C         M        TM        TR      EPS0
+         1.506E8     177E6     0.120     0.016       1.0      1723       300         1
+      $#      CP        PC     SPALL        IT        D1        D2        D3        D4
+             134                             0       0.0      0.33      -1.5       0.0
+      $#      D5      C2/P      EROD     EFMIN    NUMINT
+             0.0         0         0       1.5         0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_GRUNEISEN
+    eos_data: |
+      *EOS_LINEAR_POLYNOMIAL_TITLE
+      Tungsten alloy 
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID        C0        C1        C2        C3        C4        C5        C6
+               9               310E9
+      $#      E0        V0
+             0.0       1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Tungsten alloy
+      - Impact simulations
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
+    add: 2024-12-5
+    url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
+
+- material:
+    id: MAT_009
+    mat: MAT_NULL
+    mat_data: |
+      *MAT_NULL_TITLE
+      Resin epoxy 
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO        PC        MU     TEROD     CEROD        YM        PR
+               9      1189  
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    mat_add: MAT_ADD_EROSION
+    mat_add_data: |
+      *MAT_ADD_EROSION
+      $ Resin epoxy 
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID      EXCL    MXPRES     MNEPS    EFFEPS    VOLEPS    NUMFIP       NCS
+               9                                     1.5
+      $#  MNPRES     SIGP1     SIGVM     MXEPS     EPSSH     SIGTH   IMPULSE    FAILTM
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_GRUNEISEN
+    eos_data: |
+      *EOS_GRUNEISEN_TITLE
+      Resin epoxy 
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         C        S1        S2        S3    GAMMAO         A        E0
+               9      2730     1.493                          1.13    
+      $#      V0                LCID
+             1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Resin epoxy 
+      - Impact simulations
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
+    add: 2024-12-5
+    url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
+
+- material:
+    id: MAT_009
+    mat: MAT_NULL
+    mat_data: |
+      *MAT_NULL_TITLE
+      Polyethylene
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO        PC        MU     TEROD     CEROD        YM        PR
+               9       915  
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    mat_add: MAT_ADD_EROSION
+    mat_add_data: |
+      *MAT_ADD_EROSION
+      $ Polyethylene
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID      EXCL    MXPRES     MNEPS    EFFEPS    VOLEPS    NUMFIP       NCS
+               9                                     1.5
+      $#  MNPRES     SIGP1     SIGVM     MXEPS     EPSSH     SIGTH   IMPULSE    FAILTM
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_GRUNEISEN
+    eos_data: |
+      *EOS_GRUNEISEN_TITLE
+      Polyethylene
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         C        S1        S2        S3    GAMMAO         A        E0
+               9      2901     1.481                          1.64    
+      $#      V0                LCID
+             1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Polyethylene
+      - Impact simulations
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
+    add: 2024-12-5
+    url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
+
+- material:
+    id: MAT_009
+    mat: MAT_NULL
+    mat_data: |
+      *MAT_NULL_TITLE
+      Teflon
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO        PC        MU     TEROD     CEROD        YM        PR
+               9      2153  
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    mat_add: MAT_ADD_EROSION
+    mat_add_data: |
+      *MAT_ADD_EROSION
+      $ Teflon
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID      EXCL    MXPRES     MNEPS    EFFEPS    VOLEPS    NUMFIP       NCS
+               9                                     1.5
+      $#  MNPRES     SIGP1     SIGVM     MXEPS     EPSSH     SIGTH   IMPULSE    FAILTM
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_GRUNEISEN
+    eos_data: |
+      *EOS_GRUNEISEN_TITLE
+      Teflon
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         C        S1        S2        S3    GAMMAO         A        E0
+               9      1841     1.707                          1.18   
+      $#      V0                LCID
+             1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Teflon
+      - Impact simulations
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
+    add: 2024-12-5
+    url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
+
+- material:
+    id: MAT_009
+    mat: MAT_NULL
+    mat_data: |
+      *MAT_NULL_TITLE
+      Polyrubber
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO        PC        MU     TEROD     CEROD        YM        PR
+               9      1010  
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    mat_add: MAT_ADD_EROSION
+    mat_add_data: |
+      *MAT_ADD_EROSION
+      $ Polyrubber
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID      EXCL    MXPRES     MNEPS    EFFEPS    VOLEPS    NUMFIP       NCS
+               9                                     1.5
+      $#  MNPRES     SIGP1     SIGVM     MXEPS     EPSSH     SIGTH   IMPULSE    FAILTM
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_GRUNEISEN
+    eos_data: |
+      *EOS_GRUNEISEN_TITLE
+      Polyrubber
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         C        S1        S2        S3    GAMMAO         A        E0
+               9       852     1.865                           1.5   
+      $#      V0                LCID
+             1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Polyrubber
+      - Impact simulations
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
+    add: 2024-12-5
+    url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
+
+- material:
+    id: MAT_009
+    mat: MAT_NULL
+    mat_data: |
+      *MAT_NULL_TITLE
+      Nylon
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO        PC        MU     TEROD     CEROD        YM        PR
+               9      1140  
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    mat_add: MAT_ADD_EROSION
+    mat_add_data: |
+      *MAT_ADD_EROSION
+      $ Nylon
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID      EXCL    MXPRES     MNEPS    EFFEPS    VOLEPS    NUMFIP       NCS
+               9                                     1.5
+      $#  MNPRES     SIGP1     SIGVM     MXEPS     EPSSH     SIGTH   IMPULSE    FAILTM
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_GRUNEISEN
+    eos_data: |
+      *EOS_GRUNEISEN_TITLE
+      Nylon
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         C        S1        S2        S3    GAMMAO         A        E0
+               9      2290     1.630                          0.87  
+      $#      V0                LCID
+             1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Nylon
+      - Impact simulations
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
+    add: 2024-12-5
+    url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
+
+- material:
+    id: MAT_009
+    mat: MAT_NULL
+    mat_data: |
+      *MAT_NULL_TITLE
+      Polyurethane
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO        PC        MU     TEROD     CEROD        YM        PR
+               9      1265  
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    mat_add: MAT_ADD_EROSION
+    mat_add_data: |
+      *MAT_ADD_EROSION
+      $ Polyurethane
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID      EXCL    MXPRES     MNEPS    EFFEPS    VOLEPS    NUMFIP       NCS
+               9                                     1.5
+      $#  MNPRES     SIGP1     SIGVM     MXEPS     EPSSH     SIGTH   IMPULSE    FAILTM
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_GRUNEISEN
+    eos_data: |
+      *EOS_GRUNEISEN_TITLE
+      Polyurethane
+      $ Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). 
+      $ Investigation on high-velocity impact performance of multi-layered alumina 
+      $ ceramic armors with polymeric interlayers. Journal of Composite Materials. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         C        S1        S2        S3    GAMMAO         A        E0
+               9      2486     1.577                          1.55  
+      $#      V0                LCID
+             1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Polyurethane
+      - Impact simulations
+    ref: "Rashed, A., Yazdani, M., Babaluo, A. A., & Hajizadeh Parvin, P. (2015). Investigation on high-velocity impact performance of multi-layered alumina ceramic armors with polymeric interlayers. Journal of Composite Materials. https://doi.org/10.1177/0021998315622982"
+    add: 2024-12-5
+    url: "https://www.researchgate.net/publication/287798079_Investigation_on_high-velocity_impact_performance_of_multi-layered_alumina_ceramic_armors_with_polymeric_interlayers"
