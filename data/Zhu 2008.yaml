@@ -40,7 +40,7 @@
     app:
       - Aluminium foam 6%
     ref: "Zhu, F., Zhao, L., Lu, G., & Wang, Z. (2008). Structural response and energy absorption of sandwich panels with an aluminium foam core under blast loading. Advances in Structural Engineering, 11(5), 525–536"
-    add: 2024-11-06
+    add: 2024-12-06
     url: "https://www.researchgate.net/publication/245395597_Structural_Response_and_Energy_Absorption_of_Sandwich_Panels_with_an_Aluminium_Foam_Core_Under_Blast_Loading"
 
 - material:
@@ -85,7 +85,7 @@
     app:
       - Aluminium foam 10%
     ref: "Zhu, F., Zhao, L., Lu, G., & Wang, Z. (2008). Structural response and energy absorption of sandwich panels with an aluminium foam core under blast loading. Advances in Structural Engineering, 11(5), 525–536"
-    add: 2024-11-06
+    add: 2024-12-06
     url: "https://www.researchgate.net/publication/245395597_Structural_Response_and_Energy_Absorption_of_Sandwich_Panels_with_an_Aluminium_Foam_Core_Under_Blast_Loading"
 
 - material:
@@ -117,5 +117,5 @@
       - Detonation 
       - High explosive
     ref: "Zhu, F., Zhao, L., Lu, G., & Wang, Z. (2008). Structural response and energy absorption of sandwich panels with an aluminium foam core under blast loading. Advances in Structural Engineering, 11(5), 525–536"
-    add: 2024-11-06
+    add: 2024-12-06
     url: "https://www.researchgate.net/publication/245395597_Structural_Response_and_Energy_Absorption_of_Sandwich_Panels_with_an_Aluminium_Foam_Core_Under_Blast_Loading"
