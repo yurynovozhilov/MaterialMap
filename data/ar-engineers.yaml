@@ -1,0 +1,23 @@
+- material:
+    id: MAT_024
+    mat: MAT_PIECEWISE_LINEAR_PLASTICITY
+    mat_data: |
+      *MAT_PIECEWISE_LINEAR_PLASTICITY_TITLE
+      Aluminum 5052
+      $ https://ar-engineers.de/en/
+      $ higher-crash-safety-of-composites-through-simulation-with-ls-dyna/
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     mid        ro         e        pr      sigy      etan      fail      tdel
+              24  2.700E-6        70       0.3     0.145     0.375    1.0E21
+      $#       c         p      lcss      lcsr        vp       lcf   
+
+      $#    eps1      eps2      eps3      eps4      eps5      eps6      eps7      eps8
+             0.0     0.025      0.05     0.075       0.1      0.15     0.175       0.2
+      $#     es1       es2       es3       es4       es5       es6       es7       es8
+           0.145     0.164     0.180     0.192     0.202     0.220     0.228     0.235
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Aluminum 5052
+      - Honecomb barier
+    add: 2024-12-06
+    url: "https://ar-engineers.de/en/higher-crash-safety-of-composites-through-simulation-with-ls-dyna/"
