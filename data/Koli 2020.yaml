@@ -1,0 +1,122 @@
+- material:
+    id: MAT_008
+    mat: MAT_HIGH_EXPLOSIVE_BURN
+    mat_data: |
+      *MAT_HIGH_EXPLOSIVE_BURN_TITLE
+      PETN
+      $ Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL 
+      $ equation of state for the numerical simulation of near-field and far-field 
+      $ effects in underwater explosion scenario. Engineering Science and Technology,
+      $ an International Journal, 23(4), 758–768. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO         D       PCJ      BETA         K         G      SIGY
+               8      1700      7530     25.18       1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_JWL
+    eos_data: |
+      *EOS_JWL_TITLE
+      PETN
+      $ Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL 
+      $ equation of state for the numerical simulation of near-field and far-field 
+      $ effects in underwater explosion scenario. Engineering Science and Technology,
+      $ an International Journal, 23(4), 758–768. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         A         B        R1        R2      OMEG        E0        VO
+               8     617.0     21.67      4.40      1.32      0.25      9.13
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - PETN
+      - Detonation 
+      - High explosive
+    ref: "Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL equation of state for the numerical simulation of near-field and far-field effects in underwater explosion scenario. Engineering Science and Technology, an International Journal, 23(4), 758–768."
+    add: 2024-11-06
+    url: "https://doi.org/10.1016/j.jestch.2020.01.007"
+
+- material:
+    id: MAT_008
+    mat: MAT_HIGH_EXPLOSIVE_BURN
+    mat_data: |
+      *MAT_HIGH_EXPLOSIVE_BURN_TITLE
+      TNT
+      $ Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL 
+      $ equation of state for the numerical simulation of near-field and far-field 
+      $ effects in underwater explosion scenario. Engineering Science and Technology,
+      $ an International Journal, 23(4), 758–768. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO         D       PCJ      BETA         K         G      SIGY
+               8      1610      6845     21.00       1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_JWL
+    eos_data: |
+      *EOS_JWL_TITLE
+      TNT
+      $ Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL 
+      $ equation of state for the numerical simulation of near-field and far-field 
+      $ effects in underwater explosion scenario. Engineering Science and Technology,
+      $ an International Journal, 23(4), 758–768. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         A         B        R1        R2      OMEG        E0        VO
+               8     371.2      3.23      4.15      0.95      0.30         7
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - TNT
+      - Detonation 
+      - High explosive
+    ref: "Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL equation of state for the numerical simulation of near-field and far-field effects in underwater explosion scenario. Engineering Science and Technology, an International Journal, 23(4), 758–768."
+    add: 2024-11-06
+    url: "https://doi.org/10.1016/j.jestch.2020.01.007"
+
+- material:
+    eos: EOS_JWL
+    eos_data: |
+      *EOS_JWL_TITLE
+      C4
+      $ Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL 
+      $ equation of state for the numerical simulation of near-field and far-field 
+      $ effects in underwater explosion scenario. Engineering Science and Technology,
+      $ an International Journal, 23(4), 758–768. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         A         B        R1        R2      OMEG        E0        VO
+               8     598.1      13.7       4.5	     1.5	    0.32	     8.7
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - C4
+      - Detonation 
+      - High explosive
+    ref: "Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL equation of state for the numerical simulation of near-field and far-field effects in underwater explosion scenario. Engineering Science and Technology, an International Journal, 23(4), 758–768."
+    add: 2024-11-06
+    url: "https://doi.org/10.1016/j.jestch.2020.01.007"
+
+- material:
+    id: MAT_008
+    mat: MAT_HIGH_EXPLOSIVE_BURN
+    mat_data: |
+      *MAT_HIGH_EXPLOSIVE_BURN_TITLE
+      SEP
+      $ Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL 
+      $ equation of state for the numerical simulation of near-field and far-field 
+      $ effects in underwater explosion scenario. Engineering Science and Technology,
+      $ an International Journal, 23(4), 758–768. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO         D       PCJ      BETA         K         G      SIGY
+               8      1310      6970     15.91      1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_JWL
+    eos_data: |
+      *EOS_JWL_TITLE
+      SEP
+      $ Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL 
+      $ equation of state for the numerical simulation of near-field and far-field 
+      $ effects in underwater explosion scenario. Engineering Science and Technology,
+      $ an International Journal, 23(4), 758–768. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         A         B        R1        R2      OMEG        E0        VO
+               8     364.0      2.31	     4.3	       1	    0.28	    2.82
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - SEP
+      - Detonation 
+      - High explosive
+    ref: "Koli, S., Chellapandi, P., Rao, L. B., & Sawant, A. (2020). Study on JWL equation of state for the numerical simulation of near-field and far-field effects in underwater explosion scenario. Engineering Science and Technology, an International Journal, 23(4), 758–768."
+    add: 2024-11-06
+    url: "https://doi.org/10.1016/j.jestch.2020.01.007"
