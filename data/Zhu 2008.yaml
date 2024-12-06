@@ -1,0 +1,121 @@
+- material:
+    id: MAT_063
+    mat: MAT_CRUSHABLE_FOAM
+    mat_data: |
+      *MAT_CRUSHABLE_FOAM_TITLE
+      Aluminium foam 6%
+      $ Zhu, F., Zhao, L., Lu, G., & Wang, Z. (2008). Structural response and energy 
+      $ absorption of sandwich panels with an aluminium foam core under blast loading. 
+      $ Advances in Structural Engineering, 11(5), 525–536. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO         E        PR      LCID       TSC      DAMP     MODEL
+              63      0.16   7.27E-4       0.0      1001         5   2.18E-5       0.1
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      *DEFINE_CURVE_TITLE
+      LCID
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#    lcid      sidr       sfa       sfo      offa      offo    dattyp     lcint
+            1001         0       1.0       1.0       0.0       0.0         0         0
+      $#                a1                  o1
+                       0.0                 0.0
+                3.05252e-2          2.08902e+0
+                5.02188e-2          2.18398e+0
+                7.97593e-2          1.92285e+0
+                1.00438e-1          1.68546e+0
+                1.50656e-1          1.89911e+0
+                2.00875e-1          2.18398e+0
+                2.51094e-1          2.27893e+0
+                3.02298e-1          2.27893e+0
+                3.50547e-1          2.27893e+0
+                3.99781e-1          2.27893e+0
+                4.50985e-1          2.37389e+0
+                5.00219e-1          2.37389e+0
+                5.50438e-1          2.37389e+0
+                6.00656e-1          2.37389e+0
+                6.50875e-1          2.80119e+0
+                7.00602e-1          3.65579e+0
+                7.50328e-1          5.55490e+0
+                7.99562e-1          9.70920e+0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Aluminium foam 6%
+    ref: "Zhu, F., Zhao, L., Lu, G., & Wang, Z. (2008). Structural response and energy absorption of sandwich panels with an aluminium foam core under blast loading. Advances in Structural Engineering, 11(5), 525–536"
+    add: 2024-11-06
+    url: "https://www.researchgate.net/publication/245395597_Structural_Response_and_Energy_Absorption_of_Sandwich_Panels_with_an_Aluminium_Foam_Core_Under_Blast_Loading"
+
+- material:
+    id: MAT_063
+    mat: MAT_CRUSHABLE_FOAM
+    mat_data: |
+      *MAT_CRUSHABLE_FOAM_TITLE
+      Aluminium foam 10%
+      $ Zhu, F., Zhao, L., Lu, G., & Wang, Z. (2008). Structural response and energy 
+      $ absorption of sandwich panels with an aluminium foam core under blast loading. 
+      $ Advances in Structural Engineering, 11(5), 525–536. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO         E        PR      LCID       TSC      DAMP     MODEL
+              63      0.27   1.55E-3       0.0      1001         5   4.66E-5       0.1
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      *DEFINE_CURVE_TITLE
+      LCID
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#    lcid      sidr       sfa       sfo      offa      offo    dattyp     lcint
+            1001         0       1.0       1.0       0.0       0.0         0         0
+      $#                a1                  o1
+                       0.0                 0.0
+                3.00328e-2          4.62908e+0
+                5.02188e-2          5.22255e+0
+                7.97593e-2          4.98516e+0
+                9.99453e-2          4.43917e+0
+                1.50656e-1          4.96142e+0
+                2.00875e-1          5.31751e+0
+                2.50109e-1          4.89021e+0
+                3.01313e-1          5.12760e+0
+                3.50547e-1          5.31751e+0
+                4.00766e-1          5.98220e+0
+                4.50985e-1          5.60237e+0
+                4.99234e-1          5.41246e+0
+                5.51422e-1          5.74481e+0
+                5.99672e-1          6.83680e+0
+                6.49891e-1          8.54599e+0
+                7.01094e-1          1.14896e+1
+                7.51313e-1          1.75668e+1
+                7.99562e-1          2.99585e+1
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Aluminium foam 10%
+    ref: "Zhu, F., Zhao, L., Lu, G., & Wang, Z. (2008). Structural response and energy absorption of sandwich panels with an aluminium foam core under blast loading. Advances in Structural Engineering, 11(5), 525–536"
+    add: 2024-11-06
+    url: "https://www.researchgate.net/publication/245395597_Structural_Response_and_Energy_Absorption_of_Sandwich_Panels_with_an_Aluminium_Foam_Core_Under_Blast_Loading"
+
+- material:
+    id: MAT_008
+    mat: MAT_HIGH_EXPLOSIVE_BURN
+    mat_data: |
+      *MAT_HIGH_EXPLOSIVE_BURN_TITLE
+      TNT
+      $ Zhu, F., Zhao, L., Lu, G., & Wang, Z. (2008). Structural response and energy 
+      $ absorption of sandwich panels with an aluminium foam core under blast loading. 
+      $ Advances in Structural Engineering, 11(5), 525–536. 
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     MID        RO         D       PCJ      BETA         K         G      SIGY
+               8      1.63      0.67      0.19       1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    eos: EOS_JWL
+    eos_data: |
+      *EOS_JWL_TITLE
+      TNT
+      $ Zhu, F., Zhao, L., Lu, G., & Wang, Z. (2008). Structural response and energy 
+      $ absorption of sandwich panels with an aluminium foam core under blast loading. 
+      $ Advances in Structural Engineering, 11(5), 525–536.
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#   EOSID         A         B        R1        R2      OMEG        E0        VO
+               8      3.71   3.23E-2      4.15      0.95      0.30    7.0E-2       1.0
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - TNT
+      - Detonation 
+      - High explosive
+    ref: "Zhu, F., Zhao, L., Lu, G., & Wang, Z. (2008). Structural response and energy absorption of sandwich panels with an aluminium foam core under blast loading. Advances in Structural Engineering, 11(5), 525–536"
+    add: 2024-11-06
+    url: "https://www.researchgate.net/publication/245395597_Structural_Response_and_Energy_Absorption_of_Sandwich_Panels_with_an_Aluminium_Foam_Core_Under_Blast_Loading"
