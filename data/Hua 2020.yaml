@@ -1,0 +1,266 @@
+- material:
+    id: MAT_024
+    mat: MAT_PIECEWISE_LINEAR_PLASTICITY
+    mat_data: |
+      *MAT_PIECEWISE_LINEAR_PLASTICITY_TITLE
+      recycled corrugated pulp
+      $ Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by 
+      $ digital image correlation method and uniaxial tensile test. Journal of 
+      $ Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     mid        ro         e        pr      sigy      etan      fail      tdel
+              24 4.637E-10    251.19     0.098       0.0       0.0       0.0       0.0
+      $#       c         p      lcss      lcsr        vp
+             0.0       0.0        24         0       1.0
+      $#    eps1      eps2      eps3      eps4      eps5      eps6      eps7      eps8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      $#     es1       es2       es3       es4       es5       es6       es7       es8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      *DEFINE_CURVE_TITLE
+      recycled corrugated pulp
+      $#    lcid      sidr       sfa       sfo      offa      offo    dattyp     lcint
+              24         0       0.0       0.0       0.0       0.0         0         0
+      $#                a1                  o1
+               0.00000E+00         2.24749E+00
+               6.16939E-03         2.92098E+00
+               1.24840E-02         3.48470E+00
+               1.84679E-02         3.93488E+00
+               2.47055E-02         4.31945E+00
+               3.08685E-02         4.51517E+00
+               3.69581E-02         4.61563E+00
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Recycled corrugated pulp
+    ref: "Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by digital image correlation method and uniaxial tensile test. Journal of Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271"
+    add: 2025-01-08
+    url: "https://journals.sagepub.com/doi/10.1177/1558925020908271"
+
+- material:
+    id: MAT_024
+    mat: MAT_PIECEWISE_LINEAR_PLASTICITY
+    mat_data: |
+      *MAT_PIECEWISE_LINEAR_PLASTICITY_TITLE
+      black mixed pulp
+      $ Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by 
+      $ digital image correlation method and uniaxial tensile test. Journal of 
+      $ Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     mid        ro         e        pr      sigy      etan      fail      tdel
+              24 6.996E-10    885.22     0.166       0.0       0.0       0.0       0.0
+      $#       c         p      lcss      lcsr        vp
+             0.0       0.0        24         0       1.0
+      $#    eps1      eps2      eps3      eps4      eps5      eps6      eps7      eps8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      $#     es1       es2       es3       es4       es5       es6       es7       es8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      *DEFINE_CURVE_TITLE
+      black mixed pulp
+      $#    lcid      sidr       sfa       sfo      offa      offo    dattyp     lcint
+              24         0       0.0       0.0       0.0       0.0         0         0
+      $#                a1                  o1
+               0.00000E+00         9.22408E+00
+               6.39034E-03         1.13331E+01
+               1.24474E-02         1.26108E+01
+               1.87589E-02         1.35018E+01
+               2.48863E-02         1.42808E+01
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Black mixed pulp
+    ref: "Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by digital image correlation method and uniaxial tensile test. Journal of Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271"
+    add: 2025-01-08
+    url: "https://journals.sagepub.com/doi/10.1177/1558925020908271"
+
+- material:
+    id: MAT_024
+    mat: MAT_PIECEWISE_LINEAR_PLASTICITY
+    mat_data: |
+      *MAT_PIECEWISE_LINEAR_PLASTICITY_TITLE
+      Wood pulp
+      $ Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by 
+      $ digital image correlation method and uniaxial tensile test. Journal of 
+      $ Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     mid        ro         e        pr      sigy      etan      fail      tdel
+              24 8.371E-10   1162.64     0.169       0.0       0.0       0.0       0.0
+      $#       c         p      lcss      lcsr        vp
+             0.0       0.0        24         0       1.0
+      $#    eps1      eps2      eps3      eps4      eps5      eps6      eps7      eps8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      $#     es1       es2       es3       es4       es5       es6       es7       es8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      *DEFINE_CURVE_TITLE
+      Wood pulp
+      $#    lcid      sidr       sfa       sfo      offa      offo    dattyp     lcint
+              24         0       0.0       0.0       0.0       0.0         0         0
+      $#                a1                  o1
+               0.00000E+00         8.35786E+00
+               2.70148E-03         1.02115E+01
+               5.35883E-03         1.18392E+01
+               8.00913E-03         1.32158E+01
+               1.06524E-02         1.45049E+01
+               1.32888E-02         1.54684E+01
+               1.58087E-02         1.60545E+01
+               1.85407E-02         1.62653E+01
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Wood pulp
+    ref: "Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by digital image correlation method and uniaxial tensile test. Journal of Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271"
+    add: 2025-01-08
+    url: "https://journals.sagepub.com/doi/10.1177/1558925020908271"
+
+- material:
+    id: MAT_024
+    mat: MAT_PIECEWISE_LINEAR_PLASTICITY
+    mat_data: |
+      *MAT_PIECEWISE_LINEAR_PLASTICITY_TITLE
+      Bamboo pulp
+      $ Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by 
+      $ digital image correlation method and uniaxial tensile test. Journal of 
+      $ Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     mid        ro         e        pr      sigy      etan      fail      tdel
+              24 6.501E-10   1469.75     0.108       0.0       0.0       0.0       0.0
+      $#       c         p      lcss      lcsr        vp
+             0.0       0.0         1         0       1.0
+      $#    eps1      eps2      eps3      eps4      eps5      eps6      eps7      eps8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      $#     es1       es2       es3       es4       es5       es6       es7       es8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      *DEFINE_CURVE_TITLE
+      Bamboo pulp
+      $#    lcid      sidr       sfa       sfo      offa      offo    dattyp     lcint
+              24         0       0.0       0.0       0.0       0.0         0         0
+      $#                a1                  o1
+               0.00000E+00         1.06054E+01
+               2.51668E-03         1.31669E+01
+               5.10079E-03         1.49893E+01
+               7.75177E-03         1.65863E+01
+               1.03957E-02         1.78603E+01
+               1.30328E-02         1.89036E+01
+               1.56628E-02         1.97144E+01
+               1.82132E-02         2.04323E+01
+               2.09749E-02         2.07757E+01
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Bamboo pulp
+    ref: "Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by digital image correlation method and uniaxial tensile test. Journal of Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271"
+    add: 2025-01-08
+    url: "https://journals.sagepub.com/doi/10.1177/1558925020908271"
+
+- material:
+    id: MAT_024
+    mat: MAT_PIECEWISE_LINEAR_PLASTICITY
+    mat_data: |
+      *MAT_PIECEWISE_LINEAR_PLASTICITY_TITLE
+      Sugarcane pulp
+      $ Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by 
+      $ digital image correlation method and uniaxial tensile test. Journal of 
+      $ Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     mid        ro         e        pr      sigy      etan      fail      tdel
+              24 7.711E-10   1392.24     0.202       0.0       0.0       0.0       0.0
+      $#       c         p      lcss      lcsr        vp
+             0.0       0.0         1         0       1.0
+      $#    eps1      eps2      eps3      eps4      eps5      eps6      eps7      eps8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      $#     es1       es2       es3       es4       es5       es6       es7       es8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      *DEFINE_CURVE_TITLE
+      Sugarcane pulp
+      $#    lcid      sidr       sfa       sfo      offa      offo    dattyp     lcint
+              24         0       0.0       0.0       0.0       0.0         0         0
+      $#                a1                  o1
+               0.00000E+00         1.70201E+01
+               3.03404E-03         1.94200E+01
+               6.27987E-03         2.13208E+01
+               9.66201E-03         2.28113E+01
+               1.30328E-02         2.41217E+01
+               1.62463E-02         2.50084E+01
+               1.95223E-02         2.59498E+01
+               2.29325E-02         2.69009E+01
+               2.60423E-02         2.75613E+01
+               2.92864E-02         2.82777E+01
+               3.25200E-02         2.89013E+01
+               3.57432E-02         2.94314E+01
+               3.88847E-02         2.98647E+01
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Sugarcane pulp
+    ref: "Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by digital image correlation method and uniaxial tensile test. Journal of Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271"
+    add: 2025-01-08
+    url: "https://journals.sagepub.com/doi/10.1177/1558925020908271"
+
+- material:
+    id: MAT_024
+    mat: MAT_PIECEWISE_LINEAR_PLASTICITY
+    mat_data: |
+      *MAT_PIECEWISE_LINEAR_PLASTICITY_TITLE
+      White mixed pulp
+      $ Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by 
+      $ digital image correlation method and uniaxial tensile test. Journal of 
+      $ Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     mid        ro         e        pr      sigy      etan      fail      tdel
+              24 7.519E-10   1461.89     0.120       0.0       0.0       0.0       0.0
+      $#       c         p      lcss      lcsr        vp
+             0.0       0.0         1         0       1.0
+      $#    eps1      eps2      eps3      eps4      eps5      eps6      eps7      eps8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      $#     es1       es2       es3       es4       es5       es6       es7       es8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      *DEFINE_CURVE_TITLE
+      White mixed pulp
+      $#    lcid      sidr       sfa       sfo      offa      offo    dattyp     lcint
+              24         0       0.0       0.0       0.0       0.0         0         0
+      $#                a1                  o1
+               0.00000E+00         1.69264E+01
+               6.13256E-03         2.02341E+01
+               1.24474E-02         2.25431E+01
+               1.85043E-02         2.44925E+01
+               2.45971E-02         2.62738E+01
+               3.08685E-02         2.81776E+01
+               3.68152E-02         3.01916E+01
+               4.28688E-02         3.14502E+01
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - White mixed pulp
+    ref: "Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by digital image correlation method and uniaxial tensile test. Journal of Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271"
+    add: 2025-01-08
+    url: "https://journals.sagepub.com/doi/10.1177/1558925020908271"
+
+- material:
+    id: MAT_024
+    mat: MAT_PIECEWISE_LINEAR_PLASTICITY
+    mat_data: |
+      *MAT_PIECEWISE_LINEAR_PLASTICITY_TITLE
+      Recycled newspaper pulp
+      $ Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by 
+      $ digital image correlation method and uniaxial tensile test. Journal of 
+      $ Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+      $#     mid        ro         e        pr      sigy      etan      fail      tdel
+              24 3.071E-10    251.19     0.044       0.0       0.0       0.0       0.0
+      $#       c         p      lcss      lcsr        vp
+             0.0       0.0         1         0       1.0
+      $#    eps1      eps2      eps3      eps4      eps5      eps6      eps7      eps8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      $#     es1       es2       es3       es4       es5       es6       es7       es8
+             0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+      *DEFINE_CURVE_TITLE
+      Recycled newspaper pulp
+      $#    lcid      sidr       sfa       sfo      offa      offo    dattyp     lcint
+              24         0       0.0       0.0       0.0       0.0         0         0
+      $#                a1                  o1
+               0.00000E+00         2.24749E+00
+               6.16939E-03         2.92098E+00
+               1.24840E-02         3.48470E+00
+               1.84679E-02         3.93488E+00
+               2.47055E-02         4.31945E+00
+               3.08685E-02         4.51517E+00
+               3.69581E-02         4.61563E+00
+      $--------1---------2---------3---------4---------5---------6---------7---------8
+    app:
+      - Recycled newspaper pulp
+    ref: "Hua G, Yang M, Fei W, Lu F. Poisson’s ratios of molded pulp materials by digital image correlation method and uniaxial tensile test. Journal of Engineered Fibers and Fabrics. 2020;15. doi:10.1177/1558925020908271"
+    add: 2025-01-08
+    url: "https://journals.sagepub.com/doi/10.1177/1558925020908271"
