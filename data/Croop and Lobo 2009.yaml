@@ -1,6 +1,6 @@
 - material:
     id: MAT_057
-    mat: MAT_LOW_DENSITY_FOAM_TITLE
+    mat: MAT_LOW_DENSITY_FOAM
     mat_data: |
       *MAT_LOW_DENSITY_FOAM_TITLE
       Expanded Polyethylene Foam
