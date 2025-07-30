@@ -26,18 +26,45 @@
     </script>
     <body>
         <div class="container" role="main">
-            <!-- Заголовок -->
+            <!-- Page Header -->
             <h1>Material MAP</h1>
 
-            <!-- Сообщение о загрузке -->
-            <div id="loading" role="status" aria-live="polite">
-                Loading data...
+            <!-- Theme Toggle Button -->
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                🌙
+            </button>
+
+            <!-- Enhanced Loading Container -->
+            <div id="loading-container" class="loading-container" role="status" aria-live="polite">
+                <div class="spinner"></div>
+                <div class="loading-text">Loading materials database...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="loading-details" id="loading-details">Initializing...</div>
             </div>
 
-            <!-- Сообщение об ошибке -->
+            <!-- Legacy Loading Message (for compatibility) -->
+            <div id="loading" role="status" aria-live="polite" class="loading-indicator">
+                <span>Loading data...</span>
+            </div>
+
+            <!-- Enhanced Error Container -->
+            <div id="error-container" class="error-container" role="alert" aria-live="assertive">
+                <div class="error-icon">⚠️</div>
+                <div class="error-content">
+                    <div class="error-title">Failed to Load Materials</div>
+                    <div class="error-description" id="error-description">
+                        Unable to load the materials database. Please check your connection and try again.
+                    </div>
+                    <button class="retry-button" id="retry-button">Retry</button>
+                </div>
+            </div>
+
+            <!-- Legacy Error Message (for compatibility) -->
             <div id="error-message" role="alert" aria-live="assertive"></div>
 
-            <!-- Таблица материалов -->
+            <!-- Materials Table -->
             <table
                 id="materials-table"
                 class="display"
@@ -54,13 +81,13 @@
                 <tbody></tbody>
             </table>
 
-            <!-- Информация о проекте -->
+            <!-- Project Information -->
             <div class="about-link">
                 <p><a href="about.html">Learn more about this project</a></p>
             </div>
         </div>
 
-        <!-- Скрипт -->
+        <!-- Script -->
         <script src="scripts.js"></script>
     </body>
 </html>
