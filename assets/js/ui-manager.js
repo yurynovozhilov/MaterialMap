@@ -210,26 +210,7 @@ class UIManager {
                             
                             <div class="auth-options">
                                 <div class="auth-option">
-                                    <h4>Option 1: Personal Access Token (Recommended)</h4>
-                                    <p>Create a personal access token with 'public_repo' scope:</p>
-                                    <ol>
-                                        <li>Go to <a href="https://github.com/settings/tokens" target="_blank">GitHub Settings → Developer settings → Personal access tokens</a></li>
-                                        <li>Click "Generate new token (classic)"</li>
-                                        <li>Select "public_repo" scope</li>
-                                        <li>Copy the token and paste it below</li>
-                                    </ol>
-                                    
-                                    <div class="form-group">
-                                        <label for="github-token">Personal Access Token</label>
-                                        <input type="password" id="github-token" class="form-control" placeholder="ghp_...">
-                                        <small>Your token is stored locally and never sent to our servers</small>
-                                    </div>
-                                    
-                                    <button id="auth-with-token" class="btn btn-primary">Authenticate</button>
-                                </div>
-                                
-                                <div class="auth-option">
-                                    <h4>Option 2: OAuth (Recommended)</h4>
+                                    <h4>GitHub OAuth Authentication</h4>
                                     <p>One-click authentication through GitHub OAuth</p>
                                     <button id="auth-with-oauth" class="btn btn-primary">Authenticate with GitHub</button>
                                 </div>
@@ -316,10 +297,6 @@ class UIManager {
         // Auth modal events
         document.getElementById('auth-modal-close')?.addEventListener('click', () => {
             this.hideAuthModal();
-        });
-
-        document.getElementById('auth-with-token')?.addEventListener('click', () => {
-            this.authenticateWithToken();
         });
 
         document.getElementById('auth-with-oauth')?.addEventListener('click', () => {
@@ -706,28 +683,6 @@ class UIManager {
         document.querySelectorAll('.auth-step').forEach(step => {
             step.style.display = step.id === stepId ? 'block' : 'none';
         });
-    }
-
-    async authenticateWithToken() {
-        const tokenInput = document.getElementById('github-token');
-        const token = tokenInput.value.trim();
-
-        if (!token) {
-            this.showError('Please enter a GitHub token');
-            return;
-        }
-
-        try {
-            const user = await this.materialEditor.githubIntegration.authenticate(token);
-            this.showAuthStep('auth-step-2');
-            this.populateUserInfo(user);
-            
-            // Clear token input for security
-            tokenInput.value = '';
-            
-        } catch (error) {
-            this.showAuthError(error.message);
-        }
     }
 
     async authenticateWithOAuth() {

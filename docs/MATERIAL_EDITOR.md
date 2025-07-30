@@ -74,7 +74,7 @@ The Material Editor System implements a GitHub PR-based collaborative editing wo
 - **YAML validation**: Syntax and serialization checks
 
 ### GitHub Integration
-- Personal Access Token authentication
+- OAuth authentication
 - Automatic fork creation and management
 - Branch naming: `edit-{username}-{timestamp}`
 - Comprehensive PR descriptions with change details
@@ -88,15 +88,10 @@ The Material Editor System implements a GitHub PR-based collaborative editing wo
 
 ## Authentication
 
-### Personal Access Token (Recommended)
-1. Go to GitHub Settings → Developer settings → Personal access tokens
-2. Create new token with `public_repo` scope
-3. Enter token in authentication modal
-4. Token is stored locally in browser
-
-### OAuth (Future Enhancement)
+### GitHub OAuth
 - One-click authentication through GitHub OAuth
-- Requires server-side implementation
+- Secure token handling via sessionStorage
+- No manual token management required
 
 ## Data Structure
 

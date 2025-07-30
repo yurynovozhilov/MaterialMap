@@ -17,24 +17,6 @@ class GitHubIntegration {
     }
 
     // Authentication methods
-    async authenticate(token) {
-        try {
-            this.token = token;
-            
-            // Verify token by getting user info
-            const user = await this.getCurrentUser();
-            
-            // Store authentication
-            this.storeAuth(token, user);
-            
-            return user;
-            
-        } catch (error) {
-            this.token = null;
-            this.user = null;
-            throw new Error(`Authentication failed: ${error.message}`);
-        }
-    }
 
     async authenticateWithOAuth() {
         try {
@@ -43,9 +25,6 @@ class GitHubIntegration {
             
             this.token = result.token;
             this.user = result.user;
-            
-            // Store authentication (OAuth client already stores in sessionStorage)
-            this.storeAuth(result.token, result.user);
             
             return result.user;
             
@@ -85,38 +64,15 @@ class GitHubIntegration {
         
         // Clear OAuth data
         this.oauthClient.logout();
-        
-        // Clear legacy token data
-        localStorage.removeItem('github_token');
-        localStorage.removeItem('github_user');
-    }
-
-    storeAuth(token, user) {
-        try {
-            localStorage.setItem('github_token', token);
-            localStorage.setItem('github_user', JSON.stringify(user));
-        } catch (error) {
-            console.warn('Failed to store authentication:', error);
-        }
     }
 
     loadStoredAuth() {
         try {
-            // First try to load OAuth authentication from sessionStorage
+            // Load OAuth authentication from sessionStorage
             const oauthData = this.oauthClient.getStoredAuthData();
             if (oauthData) {
                 this.token = oauthData.token;
                 this.user = oauthData.user;
-                return;
-            }
-            
-            // Fallback to localStorage for token-based auth (legacy)
-            const storedToken = localStorage.getItem('github_token');
-            const storedUser = localStorage.getItem('github_user');
-            
-            if (storedToken && storedUser) {
-                this.token = storedToken;
-                this.user = JSON.parse(storedUser);
             }
         } catch (error) {
             console.warn('Failed to load stored authentication:', error);

@@ -4,11 +4,7 @@ This guide explains how to set up GitHub OAuth authentication for Material MAP.
 
 ## Overview
 
-Material MAP now supports two authentication methods:
-1. **Personal Access Token** (legacy method)
-2. **GitHub OAuth** (recommended method)
-
-OAuth provides a better user experience as users don't need to manually create and manage tokens.
+Material MAP uses GitHub OAuth for authentication, providing a seamless user experience without the need to manually create and manage tokens.
 
 ## Development Mode
 
@@ -222,7 +218,7 @@ This will show detailed OAuth flow information in the browser console.
 
 ## Migration from Token Authentication
 
-Users can still use Personal Access Tokens if they prefer. The system supports both methods simultaneously. OAuth is recommended for new users, while existing users can continue using their tokens.
+The system has been updated to use only OAuth authentication. Personal Access Token support has been removed to simplify the authentication flow and improve security.
 
 ## Support
 
