@@ -32,7 +32,7 @@
                 integrity="sha384-cjmdOgDzOE22dUheI5E6Gzd3upfmReW8N1y/4jwKQE50KYcvFKZJA9JxWgQOzqwQ" 
                 crossorigin="anonymous" 
                 referrerpolicy="no-referrer"></script>
-        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="assets/css/styles.css" />
     </head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CR314DZ67Q"></script>
@@ -102,7 +102,7 @@
 
             <!-- Project Information -->
             <div class="about-link">
-                <p><a href="about.html">Learn more about this project</a></p>
+                <p><a href="assets/html/about.html">Learn more about this project</a></p>
             </div>
         </div>
 
@@ -111,7 +111,7 @@
             // Register service worker for caching and offline functionality
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./service-worker.js')
+                    navigator.serviceWorker.register('./assets/js/service-worker.js')
                         .then((registration) => {
                             console.log('SW registered: ', registration);
                         })
@@ -123,6 +123,6 @@
         </script>
 
         <!-- Script -->
-        <script src="scripts.js"></script>
+        <script src="assets/js/scripts.js"></script>
     </body>
 </html>

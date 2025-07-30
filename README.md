@@ -1,28 +1,36 @@
 # Material MAP
 
-This repository supports the **Material MAP** website, a non-commercial, ad-free project aimed at assisting engineers in finding examples of material model parameter sets for LS-DYNA, sourced from articles published under Open Access. 
+A non-commercial, ad-free static website providing a library of material model parameter sets for LS-DYNA, sourced from open-access articles.
 
-The primary goal of the website is to provide engineers with a library of material models, linking directly to original open-access sources along with citation information for each reference. The project enables users to search and explore a variety of material models conveniently.
+## Quick Start
 
-## Website Link
+Open `index.html` in your browser or visit the live site.
 
-Visit the website: [Material MAP](https://yurynovozhilov.github.io/MaterialMap)
+## Documentation
 
-## About the Project
+For detailed information, please see:
+- [Project Documentation](docs/README.md)
+- [Security Information](docs/SECURITY.md)
+- [Error Handling Improvements](docs/ERROR_HANDLING_IMPROVEMENTS.md)
 
-Material MAP is a static website, built to offer a reference library for material models used in LS-DYNA simulations. All site data is stored in a multiple `yaml` files form `data` directory, allowing easy updates and additions. Users are welcome to contribute by submitting new references with material models or correcting existing data.
+## Project Structure
 
-### Key Features
+```
+├── index.html              # Main application entry point
+├── assets/                 # Static resources
+│   ├── css/               # Stylesheets
+│   ├── js/                # JavaScript files
+│   └── html/              # Additional HTML pages
+├── config/                # Configuration files
+├── data/                  # Material model YAML files
+├── dist/                  # Generated files
+└── docs/                  # Documentation
+```
 
-- **Non-commercial**: The site is entirely ad-free and provides its content for informational purposes only.
-- **Open-access links**: All data references point to open-access sources, ensuring users can access original articles freely.
-- **Citation Information**: Each reference includes proper citation details to give credit to the original authors.
-- **User Contribution**: Contributions are encouraged, allowing users to add new material models or improve data accuracy.
+## Contributing
 
-### License
+Contributions are welcome! Please see the [documentation](docs/README.md) for more information.
 
-This project is licensed under the [Creative Commons Attribution-NonCommercial (CC BY-NC) License](https://creativecommons.org/licenses/by-nc/4.0/). This license allows non-commercial copying and modification of the content with attribution to the original project.
+## License
 
----
-
-> **Disclaimer**: All data provided on the Material MAP website is to be used at the user's own risk.
+This project is licensed under the Creative Commons Attribution-NonCommercial (CC BY-NC) License.

@@ -10,9 +10,10 @@ const DATA_CACHE_NAME = 'material-map-data-v1.0.0';
 const STATIC_CACHE_URLS = [
     '/',
     '/index.html',
-    '/about.html',
-    '/styles.css',
-    '/scripts.js',
+    '/assets/html/about.html',
+    '/assets/css/styles.css',
+    '/assets/js/scripts.js',
+    '/manifest.json',
     
     // External CDN resources (will be cached on first request)
     'https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js',
