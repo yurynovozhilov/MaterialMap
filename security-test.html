@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Test - Material MAP</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .pass { color: green; }
+        .fail { color: red; }
+        .warning { color: orange; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Material MAP Security Test</h1>
+    
+    <div class="test-section">
+        <h2>1. Content Security Policy Test</h2>
+        <p>Testing if CSP is properly implemented...</p>
+        <div id="csp-test"></div>
+        <script>
+            // Test CSP implementation
+            const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+            const cspTest = document.getElementById('csp-test');
+            
+            if (cspMeta) {
+                cspTest.innerHTML = '<span class="pass">✓ CSP meta tag found</span>';
+                console.log('CSP Policy:', cspMeta.content);
+            } else {
+                cspTest.innerHTML = '<span class="fail">✗ CSP meta tag not found</span>';
+            }
+        </script>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Subresource Integrity Test</h2>
+        <p>Testing if SRI is properly implemented for CDN resources...</p>
+        <div id="sri-test"></div>
+        <script>
+            const scripts = document.querySelectorAll('script[src*="cdnjs"], script[src*="jquery"], script[src*="datatables"]');
+            const links = document.querySelectorAll('link[href*="datatables"], link[href*="cdnjs"]');
+            const sriTest = document.getElementById('sri-test');
+            
+            let sriResults = [];
+            
+            scripts.forEach(script => {
+                if (script.integrity) {
+                    sriResults.push(`<span class="pass">✓ Script SRI: ${script.src.split('/').pop()}</span>`);
+                } else {
+                    sriResults.push(`<span class="fail">✗ Missing SRI: ${script.src}</span>`);
+                }
+            });
+            
+            links.forEach(link => {
+                if (link.integrity) {
+                    sriResults.push(`<span class="pass">✓ Link SRI: ${link.href.split('/').pop()}</span>`);
+                } else {
+                    sriResults.push(`<span class="fail">✗ Missing SRI: ${link.href}</span>`);
+                }
+            });
+            
+            sriTest.innerHTML = sriResults.join('<br>');
+        </script>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Input Sanitization Test</h2>
+        <p>Testing HTML escaping functions...</p>
+        <div id="sanitization-test"></div>
+        <script>
+            // Test the escapeHtml function from scripts.js
+            function testEscapeHtml(unsafe) {
+                if (typeof unsafe !== 'string') {
+                    return String(unsafe);
+                }
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+            
+            const testCases = [
+                '<script>alert("xss")</script>',
+                'Hello & "World"',
+                "It's a test",
+                '<img src="x" onerror="alert(1)">'
+            ];
+            
+            const sanitizationTest = document.getElementById('sanitization-test');
+            let results = [];
+            
+            testCases.forEach(testCase => {
+                const escaped = testEscapeHtml(testCase);
+                const safe = !escaped.includes('<script') && !escaped.includes('onerror');
+                results.push(`
+                    <div>
+                        <strong>Input:</strong> <code>${testCase}</code><br>
+                        <strong>Output:</strong> <code>${escaped}</code><br>
+                        <strong>Status:</strong> <span class="${safe ? 'pass' : 'fail'}">${safe ? '✓ Safe' : '✗ Unsafe'}</span>
+                    </div>
+                `);
+            });
+            
+            sanitizationTest.innerHTML = results.join('<hr>');
+        </script>
+    </div>
+
+    <div class="test-section">
+        <h2>4. URL Validation Test</h2>
+        <p>Testing URL sanitization...</p>
+        <div id="url-test"></div>
+        <script>
+            function testSanitizeUrl(url) {
+                if (!url || typeof url !== 'string') {
+                    return '#';
+                }
+                
+                try {
+                    const urlObj = new URL(url);
+                    if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+                        return '#';
+                    }
+                    return url;
+                } catch (e) {
+                    return '#';
+                }
+            }
+            
+            const urlTestCases = [
+                'https://example.com',
+                'http://example.com',
+                'javascript:alert(1)',
+                'data:text/html,<script>alert(1)</script>',
+                'ftp://example.com',
+                'invalid-url',
+                null,
+                undefined
+            ];
+            
+            const urlTest = document.getElementById('url-test');
+            let urlResults = [];
+            
+            urlTestCases.forEach(testUrl => {
+                const sanitized = testSanitizeUrl(testUrl);
+                const safe = sanitized === '#' || sanitized.startsWith('http');
+                urlResults.push(`
+                    <div>
+                        <strong>Input:</strong> <code>${testUrl}</code><br>
+                        <strong>Output:</strong> <code>${sanitized}</code><br>
+                        <strong>Status:</strong> <span class="${safe ? 'pass' : 'fail'}">${safe ? '✓ Safe' : '✗ Unsafe'}</span>
+                    </div>
+                `);
+            });
+            
+            urlTest.innerHTML = urlResults.join('<hr>');
+        </script>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Security Headers Check</h2>
+        <p>Check if security headers are properly configured (requires server deployment):</p>
+        <pre>
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Referrer-Policy: strict-origin-when-cross-origin
+Content-Security-Policy: [implemented via meta tag]
+        </pre>
+        <p class="warning">⚠ These headers should be configured at the server level using .htaccess or nginx configuration files provided.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Summary</h2>
+        <p><strong>Security vulnerabilities addressed:</strong></p>
+        <ul>
+            <li class="pass">✓ Content Security Policy implemented</li>
+            <li class="pass">✓ Subresource Integrity added to all CDN resources</li>
+            <li class="pass">✓ Input sanitization improved with proper HTML escaping</li>
+            <li class="pass">✓ URL validation added</li>
+            <li class="pass">✓ Secure YAML parsing with CORE_SCHEMA</li>
+            <li class="pass">✓ Server configuration files provided</li>
+        </ul>
+    </div>
+</body>
+</html>

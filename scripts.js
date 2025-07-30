@@ -137,10 +137,14 @@ async function loadMaterials() {
 
         const yamlText = await fileResponse.text();
 
-        // Parse YAML
+        // Parse YAML with security options
         let materialsInFile;
         try {
-          materialsInFile = jsyaml.load(yamlText);
+          materialsInFile = jsyaml.load(yamlText, {
+            // Security options to prevent code execution
+            schema: jsyaml.CORE_SCHEMA, // Use core schema to prevent arbitrary code execution
+            json: false // Disable JSON compatibility mode
+          });
         } catch (yamlError) {
           console.warn(`YAML parsing error in file ${fileName}: ${yamlError.message}`);
           continue;
@@ -167,17 +171,17 @@ async function loadMaterials() {
         return ["Invalid data", "-", "-", "-", null];
       }
 
-      // Create markup for the first column
-      let materialModelHTML = `<div>${material.id || "-"}/${material.mat || "-"}</div>`;
-      if (material.mat_add)     {materialModelHTML += `<div>${material.mat_add}</div>`}
-      if (material.mat_thermal) {materialModelHTML += `<div>${material.mat_thermal}</div>`}
+      // Create markup for the first column with proper sanitization
+      let materialModelHTML = `<div>${escapeHtml(material.id || "-")}/${escapeHtml(material.mat || "-")}</div>`;
+      if (material.mat_add)     {materialModelHTML += `<div>${escapeHtml(material.mat_add)}</div>`}
+      if (material.mat_thermal) {materialModelHTML += `<div>${escapeHtml(material.mat_thermal)}</div>`}
 
-      // Возвращаем строки таблицы
+      // Return table rows with proper sanitization
       return [
         materialModelHTML,
-        material.eos || "-",
+        escapeHtml(material.eos || "-"),
         `<ul>${(material.app || [])
-          .map((app) => `<li>${app}</li>`)
+          .map((app) => `<li>${escapeHtml(app)}</li>`)
           .join("")}</ul>`,
         formatDate(material.add),
         material,
@@ -236,8 +240,8 @@ async function loadMaterials() {
           ? createCodeBlock("*MAT_THERMAL", material.mat_thermal_data)
           : ""; // Если mat_thermal_data нет, блок не создается
         const referenceHtml = material.ref
-          ? `<div class="reference-block"><strong>Reference: </strong><a href="${material.url}" target="_blank">${material.ref}</a></div>`
-          :  `<div class="reference-block"><strong>Reference: </strong><a href="${material.url}" target="_blank">${material.url}</a></div>`;
+          ? `<div class="reference-block"><strong>Reference: </strong><a href="${sanitizeUrl(material.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(material.ref)}</a></div>`
+          :  `<div class="reference-block"><strong>Reference: </strong><a href="${sanitizeUrl(material.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(material.url)}</a></div>`;
 
         row.child(
           `${referenceHtml}${matDataHtml}${eosDataHtml}${matAddDataHtml}${matThermalDataHtml}`
@@ -263,10 +267,11 @@ async function loadMaterials() {
 // Create a code block with title and copy button
 function createCodeBlock(title, content) {
   const escapedContent = escapeHtml(content); // Escape HTML for safe display
+  const escapedTitle = escapeHtml(title); // Escape title for safety
   return `
     <div class="code-container">
       <div class="code-header">
-        <span class="code-title">${title}</span>
+        <span class="code-title">${escapedTitle}</span>
         <button class="copy-button" onclick="copyToClipboard('${encodeURIComponent(content)}')">Copy</button>
       </div>
       <pre><code>${escapedContent}</code></pre>
@@ -275,12 +280,34 @@ function createCodeBlock(title, content) {
 
 // Escape HTML special characters
 function escapeHtml(unsafe) {
+  if (typeof unsafe !== 'string') {
+    return String(unsafe);
+  }
   return unsafe
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+// Validate and sanitize URLs
+function sanitizeUrl(url) {
+  if (!url || typeof url !== 'string') {
+    return '#';
+  }
+  
+  try {
+    const urlObj = new URL(url);
+    // Only allow http and https protocols
+    if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+      return '#';
+    }
+    return escapeHtml(url);
+  } catch (e) {
+    // Invalid URL
+    return '#';
+  }
 }
 
 // Copy text to clipboard
