@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Editor Test</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    
+    <!-- Material Editor Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/material-editor.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 20px;
+            background: var(--bg-color, #ffffff);
+            color: var(--text-color, #333);
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid var(--border-color, #ddd);
+            border-radius: 8px;
+            background: var(--section-bg, #f8f9fa);
+        }
+        
+        .test-material {
+            background: var(--bg-color, #ffffff);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border: 1px solid var(--border-color, #e0e0e0);
+        }
+        
+        .test-material h4 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color, #007bff);
+        }
+        
+        .test-material p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        .test-button {
+            background: var(--primary-color, #007bff);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .test-button:hover {
+            background: var(--primary-dark, #0056b3);
+        }
+        
+        .status-indicator {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: var(--success-light, #d4edda);
+            color: var(--success-dark, #155724);
+        }
+        
+        .status-error {
+            background: var(--error-light, #f8d7da);
+            color: var(--error-dark, #721c24);
+        }
+        
+        .status-warning {
+            background: var(--warning-light, #fff3cd);
+            color: var(--warning-dark, #856404);
+        }
+        
+        .log-container {
+            background: var(--code-bg, #f8f9fa);
+            border: 1px solid var(--border-color, #ddd);
+            border-radius: 4px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 0;
+        }
+        
+        .log-error {
+            color: var(--error-color, #dc3545);
+        }
+        
+        .log-warning {
+            color: var(--warning-color, #ffc107);
+        }
+        
+        .log-info {
+            color: var(--info-color, #17a2b8);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Material Editor System Test</h1>
+        
+        <!-- System Status -->
+        <div class="test-section">
+            <h2>System Status</h2>
+            <div id="system-status" class="status-indicator">Checking system...</div>
+            <div id="component-status"></div>
+        </div>
+        
+        <!-- Test Materials -->
+        <div class="test-section">
+            <h2>Test Materials</h2>
+            <p>Click "Test Edit" to test the material editor with sample data.</p>
+            
+            <div class="test-material">
+                <h4>MAT_001 / MAT_ELASTIC</h4>
+                <p><strong>Applications:</strong> Steel structures, Basic testing</p>
+                <p><strong>Reference:</strong> Test Reference (2024)</p>
+                <button class="test-button" onclick="testEditMaterial(0)">Test Edit</button>
+            </div>
+            
+            <div class="test-material">
+                <h4>MAT_002 / MAT_JOHNSON_COOK</h4>
+                <p><strong>Applications:</strong> High-rate deformation, Impact analysis</p>
+                <p><strong>Reference:</strong> Johnson, G.R. & Cook, W.H. (1983)</p>
+                <button class="test-button" onclick="testEditMaterial(1)">Test Edit</button>
+            </div>
+        </div>
+        
+        <!-- Authentication Test -->
+        <div class="test-section">
+            <h2>GitHub Authentication Test</h2>
+            <p>Test GitHub authentication functionality.</p>
+            <button class="test-button" onclick="testAuthentication()">Test Auth Modal</button>
+            <button class="test-button" onclick="checkAuthStatus()">Check Auth Status</button>
+            <div id="auth-status"></div>
+        </div>
+        
+        <!-- Validation Test -->
+        <div class="test-section">
+            <h2>Validation Engine Test</h2>
+            <p>Test material validation with various scenarios.</p>
+            <button class="test-button" onclick="testValidation('valid')">Test Valid Material</button>
+            <button class="test-button" onclick="testValidation('invalid')">Test Invalid Material</button>
+            <button class="test-button" onclick="testValidation('warning')">Test Warning Material</button>
+            <div id="validation-results"></div>
+        </div>
+        
+        <!-- Change Tracking Test -->
+        <div class="test-section">
+            <h2>Change Tracking Test</h2>
+            <p>Test change tracking functionality.</p>
+            <button class="test-button" onclick="testChangeTracking()">Test Change Tracking</button>
+            <div id="change-tracking-results"></div>
+        </div>
+        
+        <!-- Debug Log -->
+        <div class="test-section">
+            <h2>Debug Log</h2>
+            <button class="test-button" onclick="clearLog()">Clear Log</button>
+            <div id="debug-log" class="log-container"></div>
+        </div>
+    </div>
+
+    <!-- Material Editor Scripts -->
+    <script src="../js/change-tracker.js"></script>
+    <script src="../js/validation-engine.js"></script>
+    <script src="../js/github-integration.js"></script>
+    <script src="../js/ui-manager.js"></script>
+    <script src="../js/material-editor.js"></script>
+
+    <script>
+        // Test data
+        const testMaterials = [
+            {
+                id: "MAT_001",
+                mat: "MAT_ELASTIC",
+                mat_data: `*MAT_ELASTIC_TITLE
+Test Material - Elastic Steel
+$--------1---------2---------3---------4---------5---------6---------7---------8
+$#     MID        RO         E        PR        DA        DB  NOT USED
+         1  7.85E-09     200000      0.30       0.0       0.0`,
+                app: ["Steel structures", "Basic testing"],
+                ref: "Test Reference for Material Testing (2024). Journal of Test Materials, 1(1), 1-10.",
+                url: "https://example.com/test-reference",
+                add: "2024-01-01"
+            },
+            {
+                id: "MAT_002",
+                mat: "MAT_JOHNSON_COOK",
+                mat_data: `*MAT_JOHNSON_COOK_TITLE
+Johnson-Cook Steel
+$--------1---------2---------3---------4---------5---------6---------7---------8
+$#     MID        RO         G         E        PR      DTEF      AOPT
+         2  7.85E-09     80000     200000      0.30       0.0       0.0
+$#       A         B         N         C         M        TM        TR      EPSO
+     350.0     275.0      0.36     0.022       1.0     1811.0      293.0       1.0`,
+                app: ["High-rate deformation", "Impact analysis"],
+                ref: "Johnson, G.R. & Cook, W.H. (1983). A constitutive model and data for metals subjected to large strains, high strain rates and high temperatures. Proceedings of the 7th International Symposium on Ballistics, 541-547.",
+                url: "https://example.com/johnson-cook-reference",
+                add: "2024-01-02"
+            }
+        ];
+
+        // Global variables
+        let materialEditor = null;
+        let testLog = [];
+
+        // Initialize test environment
+        window.addEventListener('load', () => {
+            initializeTest();
+        });
+
+        function initializeTest() {
+            log('Initializing Material Editor Test Environment...', 'info');
+            
+            try {
+                // Check if all components are loaded
+                const components = [
+                    'ChangeTracker',
+                    'ValidationEngine', 
+                    'GitHubIntegration',
+                    'UIManager',
+                    'MaterialEditor'
+                ];
+                
+                const missingComponents = components.filter(comp => typeof window[comp] === 'undefined');
+                
+                if (missingComponents.length > 0) {
+                    updateSystemStatus('error', `Missing components: ${missingComponents.join(', ')}`);
+                    return;
+                }
+                
+                // Initialize material editor
+                materialEditor = new MaterialEditor();
+                
+                updateSystemStatus('success', 'Material Editor System initialized successfully');
+                updateComponentStatus(components);
+                
+                log('Material Editor initialized successfully', 'info');
+                
+            } catch (error) {
+                updateSystemStatus('error', `Initialization failed: ${error.message}`);
+                log(`Initialization error: ${error.message}`, 'error');
+            }
+        }
+
+        function updateSystemStatus(type, message) {
+            const statusEl = document.getElementById('system-status');
+            statusEl.className = `status-indicator status-${type}`;
+            statusEl.textContent = message;
+        }
+
+        function updateComponentStatus(components) {
+            const statusEl = document.getElementById('component-status');
+            const statusHTML = components.map(comp => {
+                const loaded = typeof window[comp] !== 'undefined';
+                return `<div class="status-indicator ${loaded ? 'status-success' : 'status-error'}">
+                    ${comp}: ${loaded ? 'Loaded' : 'Missing'}
+                </div>`;
+            }).join('');
+            statusEl.innerHTML = statusHTML;
+        }
+
+        function testEditMaterial(index) {
+            if (!materialEditor) {
+                log('Material Editor not initialized', 'error');
+                return;
+            }
+
+            const material = testMaterials[index];
+            log(`Testing edit for material: ${material.id}`, 'info');
+
+            try {
+                // Simulate starting an edit session
+                materialEditor.uiManager.startMaterialEdit(material, {
+                    filename: `test-${index}.yaml`,
+                    index: 0,
+                    rowIndex: index
+                });
+                
+                log(`Edit session started for ${material.id}`, 'info');
+                
+            } catch (error) {
+                log(`Edit test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function testAuthentication() {
+            if (!materialEditor) {
+                log('Material Editor not initialized', 'error');
+                return;
+            }
+
+            log('Testing authentication modal...', 'info');
+            
+            try {
+                materialEditor.uiManager.showContributionMode();
+                log('Authentication modal opened', 'info');
+            } catch (error) {
+                log(`Authentication test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function checkAuthStatus() {
+            if (!materialEditor) {
+                log('Material Editor not initialized', 'error');
+                return;
+            }
+
+            const isAuth = materialEditor.githubIntegration.isAuthenticated();
+            const user = materialEditor.githubIntegration.user;
+            
+            const statusEl = document.getElementById('auth-status');
+            if (isAuth && user) {
+                statusEl.innerHTML = `<div class="status-indicator status-success">
+                    Authenticated as: ${user.login} (${user.name || 'No name'})
+                </div>`;
+                log(`Authenticated as: ${user.login}`, 'info');
+            } else {
+                statusEl.innerHTML = `<div class="status-indicator status-warning">
+                    Not authenticated
+                </div>`;
+                log('Not authenticated', 'warning');
+            }
+        }
+
+        async function testValidation(type) {
+            if (!materialEditor) {
+                log('Material Editor not initialized', 'error');
+                return;
+            }
+
+            log(`Testing validation: ${type}`, 'info');
+
+            let testMaterial;
+            switch (type) {
+                case 'valid':
+                    testMaterial = testMaterials[0];
+                    break;
+                case 'invalid':
+                    testMaterial = {
+                        // Missing required fields
+                        mat: "INVALID_MAT_TYPE",
+                        mat_data: "Invalid data format"
+                    };
+                    break;
+                case 'warning':
+                    testMaterial = {
+                        ...testMaterials[0],
+                        url: "http://insecure-url.com", // HTTP instead of HTTPS
+                        ref: "Short ref" // Too short reference
+                    };
+                    break;
+            }
+
+            try {
+                const validation = await materialEditor.validationEngine.validateMaterial(testMaterial);
+                
+                const resultsEl = document.getElementById('validation-results');
+                resultsEl.innerHTML = `
+                    <div class="status-indicator status-${validation.status.toLowerCase()}">
+                        Status: ${validation.status}
+                    </div>
+                    <div>Errors: ${validation.errors.length}</div>
+                    <div>Warnings: ${validation.warnings.length}</div>
+                    ${validation.errors.length > 0 ? `
+                        <div><strong>Errors:</strong></div>
+                        <ul>${validation.errors.map(e => `<li>${e.field}: ${e.message}</li>`).join('')}</ul>
+                    ` : ''}
+                    ${validation.warnings.length > 0 ? `
+                        <div><strong>Warnings:</strong></div>
+                        <ul>${validation.warnings.map(w => `<li>${w.field}: ${w.message}</li>`).join('')}</ul>
+                    ` : ''}
+                `;
+                
+                log(`Validation ${type} test completed: ${validation.status}`, 'info');
+                
+            } catch (error) {
+                log(`Validation test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function testChangeTracking() {
+            if (!materialEditor) {
+                log('Material Editor not initialized', 'error');
+                return;
+            }
+
+            log('Testing change tracking...', 'info');
+
+            try {
+                const tracker = new ChangeTracker();
+                
+                // Test various changes
+                const change1 = tracker.trackChange('id', 'MAT_001', 'MAT_002');
+                const change2 = tracker.trackChange('app[0]', 'Old application', 'New application');
+                const change3 = tracker.trackChange('new_field', undefined, 'New value');
+                
+                const summary = tracker.getChangesSummary();
+                
+                const resultsEl = document.getElementById('change-tracking-results');
+                resultsEl.innerHTML = `
+                    <div class="status-indicator status-success">
+                        Change tracking test completed
+                    </div>
+                    <div>Total changes: ${summary.total}</div>
+                    <div>Updates: ${summary.byOperation.UPDATE}</div>
+                    <div>Additions: ${summary.byOperation.ADD}</div>
+                    <div>High confidence: ${summary.byConfidence.high}</div>
+                    <div>Medium confidence: ${summary.byConfidence.medium}</div>
+                    <div>Low confidence: ${summary.byConfidence.low}</div>
+                `;
+                
+                log(`Change tracking test completed: ${summary.total} changes tracked`, 'info');
+                
+            } catch (error) {
+                log(`Change tracking test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = { timestamp, message, type };
+            testLog.push(entry);
+            
+            const logEl = document.getElementById('debug-log');
+            const entryEl = document.createElement('div');
+            entryEl.className = `log-entry log-${type}`;
+            entryEl.textContent = `[${timestamp}] ${message}`;
+            
+            logEl.appendChild(entryEl);
+            logEl.scrollTop = logEl.scrollHeight;
+            
+            // Also log to console
+            console[type === 'error' ? 'error' : type === 'warning' ? 'warn' : 'log'](message);
+        }
+
+        function clearLog() {
+            testLog = [];
+            document.getElementById('debug-log').innerHTML = '';
+            log('Log cleared', 'info');
+        }
+
+        // Override console methods to capture logs
+        const originalConsole = {
+            log: console.log,
+            warn: console.warn,
+            error: console.error
+        };
+
+        console.log = function(...args) {
+            originalConsole.log.apply(console, args);
+            if (args[0] && typeof args[0] === 'string') {
+                log(args[0], 'info');
+            }
+        };
+
+        console.warn = function(...args) {
+            originalConsole.warn.apply(console, args);
+            if (args[0] && typeof args[0] === 'string') {
+                log(args[0], 'warning');
+            }
+        };
+
+        console.error = function(...args) {
+            originalConsole.error.apply(console, args);
+            if (args[0] && typeof args[0] === 'string') {
+                log(args[0], 'error');
+            }
+        };
+    </script>
+</body>
+</html>

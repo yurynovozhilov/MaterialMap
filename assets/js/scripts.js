@@ -334,6 +334,13 @@ async function loadMaterials() {
         if (material.mat_add) { materialModelHTML += `<div>${escapeHtml(material.mat_add)}</div>`; }
         if (material.mat_thermal) { materialModelHTML += `<div>${escapeHtml(material.mat_thermal)}</div>`; }
 
+        // Create edit button HTML
+        const editButtonHTML = `<button class="btn btn-edit btn-sm" 
+                                        onclick="handleEditMaterial(${tableData.length})" 
+                                        title="Suggest edit for this material">
+                                   ✏️ Edit
+                                 </button>`;
+
         // Return table rows with proper sanitization
         tableData.push([
           materialModelHTML,
@@ -342,7 +349,8 @@ async function loadMaterials() {
             .map((app) => `<li>${escapeHtml(app)}</li>`)
             .join("")}</ul>`,
           formatDate(material.add),
-          material,
+          editButtonHTML,
+          material, // Keep material data in hidden column
         ]);
       } catch (materialError) {
         console.warn("Error processing material:", materialError);
@@ -374,7 +382,8 @@ async function loadMaterials() {
           { title: "EOS" },
           { title: "Applications" },
           { title: "Added" },
-          { visible: false },
+          { title: "Actions", orderable: false, searchable: false },
+          { visible: false }, // Material data column
         ],
         order: [[0, "asc"]],
         pageLength: 20,
@@ -402,12 +411,12 @@ async function loadMaterials() {
           const row = table.row(tr);
           const rowData = row.data();
           
-          if (!rowData || rowData.length < 5) {
+          if (!rowData || rowData.length < 6) {
             console.warn("Invalid row data:", rowData);
             return;
           }
           
-          const material = rowData[4];
+          const material = rowData[5]; // Material data is now in column 5
           if (!material) {
             console.warn("No material data available for row:", rowData);
             return;
@@ -636,6 +645,102 @@ function showNetworkNotification(message, type = 'info') {
   }, 3000);
 }
 
+// Initialize Material Editor System
+function initializeMaterialEditor() {
+  try {
+    // Check if all required classes are available
+    if (typeof MaterialEditor === 'undefined' || 
+        typeof ChangeTracker === 'undefined' || 
+        typeof ValidationEngine === 'undefined' || 
+        typeof GitHubIntegration === 'undefined' || 
+        typeof UIManager === 'undefined') {
+      console.warn('Material Editor components not fully loaded. Edit functionality will be disabled.');
+      return;
+    }
+    
+    // Initialize the material editor
+    materialEditor = new MaterialEditor();
+    console.log('Material Editor system initialized successfully');
+    
+    // Add connection status indicator
+    addConnectionStatusIndicator();
+    
+  } catch (error) {
+    console.error('Failed to initialize Material Editor:', error);
+    materialEditor = null;
+  }
+}
+
+// Add connection status indicator to the page
+function addConnectionStatusIndicator() {
+  const statusIndicator = document.createElement('div');
+  statusIndicator.className = 'connection-status';
+  statusIndicator.id = 'connection-status';
+  statusIndicator.textContent = navigator.onLine ? 'Online' : 'Offline';
+  statusIndicator.classList.add(navigator.onLine ? 'online' : 'offline');
+  
+  document.body.appendChild(statusIndicator);
+}
+
+// Handle edit material button clicks
+function handleEditMaterial(rowIndex) {
+  try {
+    if (!materialEditor) {
+      console.warn('Material Editor not initialized');
+      alert('Material editing is not available. Please refresh the page and try again.');
+      return;
+    }
+
+    // Get the table and row data
+    const table = $('#materials-table').DataTable();
+    const rowData = table.row(rowIndex).data();
+    
+    if (!rowData || rowData.length < 6) {
+      console.error('Invalid row data for edit:', rowData);
+      alert('Unable to edit this material. Invalid data.');
+      return;
+    }
+
+    const material = rowData[5]; // Material data is in column 5
+    if (!material) {
+      console.error('No material data found for edit');
+      alert('Unable to edit this material. No material data found.');
+      return;
+    }
+
+    // Extract filename and index (this would need to be enhanced based on actual data structure)
+    const filename = extractFilenameFromMaterial(material);
+    const materialIndex = extractMaterialIndexFromTable(rowIndex);
+    
+    // Start the edit session
+    materialEditor.uiManager.startMaterialEdit(material, {
+      filename: filename,
+      index: materialIndex,
+      rowIndex: rowIndex
+    });
+
+  } catch (error) {
+    console.error('Error starting material edit:', error);
+    alert(`Failed to start editing: ${error.message}`);
+  }
+}
+
+// Helper function to extract filename from material data
+function extractFilenameFromMaterial(material) {
+  // This is a placeholder - in a real implementation, you'd need to track
+  // which file each material came from during the loading process
+  // For now, we'll use a default filename
+  return 'unknown.yaml';
+}
+
+// Helper function to extract material index
+function extractMaterialIndexFromTable(rowIndex) {
+  // This is a placeholder - in a real implementation, you'd need to track
+  // the original index of each material within its file
+  // For now, we'll use the row index as a fallback
+  return rowIndex;
+}
+
 // Enhanced retry functionality
 function setupRetryMechanism() {
   const retryButton = document.getElementById("retry-button");
@@ -656,6 +761,9 @@ function setupRetryMechanism() {
   }
 }
 
+// Global material editor instance
+let materialEditor = null;
+
 // Load materials when the page opens
 window.addEventListener("load", () => {
   // Initialize theme
@@ -672,6 +780,9 @@ window.addEventListener("load", () => {
   
   // Set up enhanced retry mechanism
   setupRetryMechanism();
+  
+  // Initialize material editor system
+  initializeMaterialEditor();
   
   // Load materials
   loadMaterials();

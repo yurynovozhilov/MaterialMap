@@ -18,6 +18,7 @@ All site data is stored in multiple YAML files in the `data` directory, allowing
 - **Open-access links**: All data references point to open-access sources, ensuring users can access original articles freely.
 - **Citation Information**: Each reference includes proper citation details to give credit to the original authors.
 - **User Contribution**: Contributions are encouraged, allowing users to add new material models or improve data accuracy.
+- **Collaborative Editing**: GitHub PR-based material editing system allows users to suggest improvements through a user-friendly interface.
 
 ## Quick Start
 
@@ -28,6 +29,7 @@ Open `index.html` in your browser or visit the live site.
 For detailed information, please see:
 - [Security Information](docs/SECURITY.md)
 - [Error Handling Improvements](docs/ERROR_HANDLING_IMPROVEMENTS.md)
+- [Material Editor System](docs/MATERIAL_EDITOR.md)
 
 ## Project Structure
 
