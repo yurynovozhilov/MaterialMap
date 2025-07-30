@@ -220,10 +220,18 @@ function parseYAMLSafely(yamlText, fileName) {
     const validMaterials = [];
     for (let i = 0; i < parsed.length; i++) {
       const item = parsed[i];
-      if (!item || typeof item !== 'object' || !item.material) {
+      if (!item || typeof item !== 'object') {
         console.warn(`Skipping invalid material at index ${i} in ${fileName}`);
         continue;
       }
+      
+      // Check if item has material property or is a material itself
+      const material = item.material || item;
+      if (!material || typeof material !== 'object' || !material.id) {
+        console.warn(`Skipping invalid material at index ${i} in ${fileName} - missing id`);
+        continue;
+      }
+      
       validMaterials.push(item);
     }
     
@@ -322,8 +330,11 @@ async function loadMaterials() {
     const tableData = [];
     let invalidMaterials = 0;
     
-    for (const { material } of allMaterials) {
+    for (const item of allMaterials) {
       try {
+        // Extract material from the item structure
+        const material = item.material || item;
+        
         if (!material || typeof material !== "object") {
           invalidMaterials++;
           continue;

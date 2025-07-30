@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Editor Test - Material MAP</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    
+    <!-- Styles -->
+    <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/material-editor.css" />
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 20px;
+            background: var(--bg-primary, #ffffff);
+            color: var(--text-primary, #333);
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .status-box {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .test-table {
+            margin: 20px 0;
+        }
+        
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Material Editor Test Page</h1>
+        
+        <div id="system-status" class="status-box status-warning">
+            Initializing system...
+        </div>
+        
+        <div id="debug-info" class="debug-info">
+            <strong>Debug Log:</strong><br>
+            <div id="debug-log"></div>
+        </div>
+        
+        <div class="test-table">
+            <h2>Test Materials Table</h2>
+            <table id="materials-table" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Material Model</th>
+                        <th>EOS</th>
+                        <th>Applications</th>
+                        <th>Added</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Material Editor Scripts -->
+    <script src="assets/js/change-tracker.js"></script>
+    <script src="assets/js/validation-engine.js"></script>
+    <script src="assets/js/github-integration.js"></script>
+    <script src="assets/js/ui-manager.js"></script>
+    <script src="assets/js/material-editor.js"></script>
+    
+    <!-- Main Script -->
+    <script src="assets/js/scripts.js"></script>
+
+    <script>
+        // Debug logging function
+        function debugLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logDiv = document.getElementById('debug-log');
+            const color = type === 'error' ? 'red' : type === 'warning' ? 'orange' : 'black';
+            logDiv.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // Override console methods to capture logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            debugLog(args.join(' '), 'info');
+            originalLog.apply(console, args);
+        };
+
+        console.error = function(...args) {
+            debugLog(args.join(' '), 'error');
+            originalError.apply(console, args);
+        };
+
+        console.warn = function(...args) {
+            debugLog(args.join(' '), 'warning');
+            originalWarn.apply(console, args);
+        };
+
+        // Check system status
+        window.addEventListener('load', () => {
+            debugLog('Page loaded, checking system components...');
+            
+            // Check if all required components are loaded
+            const components = [
+                'ChangeTracker',
+                'ValidationEngine', 
+                'GitHubIntegration',
+                'UIManager',
+                'MaterialEditor'
+            ];
+            
+            const statusDiv = document.getElementById('system-status');
+            let allLoaded = true;
+            let missingComponents = [];
+            
+            components.forEach(comp => {
+                if (typeof window[comp] === 'undefined') {
+                    allLoaded = false;
+                    missingComponents.push(comp);
+                    debugLog(`Missing component: ${comp}`, 'error');
+                } else {
+                    debugLog(`Component loaded: ${comp}`, 'info');
+                }
+            });
+            
+            if (allLoaded) {
+                statusDiv.className = 'status-box status-success';
+                statusDiv.textContent = 'All components loaded successfully! Material editor should be working.';
+                debugLog('All components loaded successfully', 'info');
+            } else {
+                statusDiv.className = 'status-box status-error';
+                statusDiv.textContent = `Missing components: ${missingComponents.join(', ')}`;
+                debugLog(`Missing components: ${missingComponents.join(', ')}`, 'error');
+            }
+            
+            // Check if materialEditor is initialized
+            setTimeout(() => {
+                if (typeof materialEditor !== 'undefined' && materialEditor !== null) {
+                    debugLog('MaterialEditor instance created successfully', 'info');
+                } else {
+                    debugLog('MaterialEditor instance not created', 'error');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
