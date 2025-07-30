@@ -24,6 +24,45 @@ All site data is stored in multiple YAML files in the `data` directory, allowing
 
 Open `index.html` in your browser or visit the live site.
 
+## Testing
+
+### Running Tests
+
+The project includes comprehensive unit and integration tests:
+
+```bash
+# Install dependencies
+npm install
+
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run all tests (including browser tests)
+./run-tests.sh
+```
+
+### Test Coverage
+
+- **ValidationEngine**: Material data validation logic
+- **ChangeTracker**: Change tracking and history management
+- **Integration Tests**: Complete workflow testing
+- **Browser Tests**: Real-world usage scenarios
+
+### Test Pages
+
+For manual testing in browser:
+- `test-simple.html`: Basic component loading tests
+- `test-editor.html`: Full material editor functionality
+- `debug-editor.html`: Debug version with detailed logging
+
+See [TEST_REPORT.md](TEST_REPORT.md) for detailed test results and coverage information.
+
 ## Documentation
 
 For detailed information, please see:
