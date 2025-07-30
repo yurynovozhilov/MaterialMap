@@ -731,7 +731,27 @@ class UIManager {
     showAuthError(message) {
         const errorMessage = document.getElementById('auth-error-message');
         if (errorMessage) {
-            errorMessage.textContent = message;
+            // Check if this is a development mode configuration issue
+            const isLocalhost = window.location.hostname === 'localhost' || 
+                              window.location.hostname === '127.0.0.1' ||
+                              window.location.hostname.includes('127.0.0.1');
+            
+            if (isLocalhost && message.includes('not configured')) {
+                errorMessage.innerHTML = `
+                    <p><strong>Development Mode Configuration Issue</strong></p>
+                    <p>${message}</p>
+                    <p><strong>To fix this:</strong></p>
+                    <ol>
+                        <li>Open <code>assets/js/config.js</code></li>
+                        <li>Ensure <code>development.enabled</code> is <code>true</code></li>
+                        <li>Ensure <code>development.mockOAuth</code> is <code>true</code></li>
+                        <li>Refresh the page</li>
+                    </ol>
+                    <p>Alternatively, set up a real GitHub OAuth App and configure the Client ID.</p>
+                `;
+            } else {
+                errorMessage.textContent = message;
+            }
         }
         this.showAuthStep('auth-step-error');
     }

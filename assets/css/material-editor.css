@@ -633,6 +633,28 @@
     border-radius: 4px;
     margin: 12px 0;
     font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.error-message p {
+    margin: 8px 0;
+}
+
+.error-message ol {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.error-message li {
+    margin: 4px 0;
+}
+
+.error-message code {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
 }
 
 /* Connection Status */

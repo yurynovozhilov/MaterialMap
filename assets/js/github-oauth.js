@@ -55,7 +55,16 @@ class GitHubOAuth {
         try {
             // Check if client ID is configured
             if (!this.clientId || this.clientId === 'YOUR_GITHUB_CLIENT_ID') {
-                if (this.isDevelopment && window.MaterialMapConfig?.development?.mockOAuth) {
+                // Check if development mode should be enabled
+                const devModeEnabled = this.isDevelopment || window.MaterialMapConfig?.development?.enabled;
+                const mockOAuthEnabled = window.MaterialMapConfig?.development?.mockOAuth;
+                
+                // Debug information for development
+                if (devModeEnabled) {
+                    console.log('OAuth Debug: Development mode enabled, using mock authentication');
+                }
+                
+                if (devModeEnabled && mockOAuthEnabled) {
                     // Development mode: simulate OAuth flow
                     console.warn('Development mode: Simulating OAuth flow');
                     
@@ -71,7 +80,16 @@ class GitHubOAuth {
                     
                     return { user: mockUser, token: mockToken };
                 } else {
-                    throw new Error('GitHub OAuth Client ID not configured. Please set up your GitHub OAuth App or enable development mode.');
+                    // Provide more helpful error message
+                    const isLocalhost = window.location.hostname === 'localhost' || 
+                                      window.location.hostname === '127.0.0.1' ||
+                                      window.location.hostname.includes('127.0.0.1');
+                    
+                    if (isLocalhost) {
+                        throw new Error('Development mode detected but not properly configured. Please check that development.enabled and development.mockOAuth are set to true in config.js, or configure a real GitHub OAuth Client ID.');
+                    } else {
+                        throw new Error('GitHub OAuth Client ID not configured. Please set up your GitHub OAuth App with a valid Client ID.');
+                    }
                 }
             }
 
