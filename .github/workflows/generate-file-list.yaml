@@ -1,10 +1,9 @@
 name: Generate YAML File List
 
 on:
-  push:
-    branches:
-      - main # Запускается при пуше в ветку main
   workflow_dispatch: # Возможность ручного запуска
+  schedule:
+    - cron: '0 2 * * *' # Запускается каждый день в 2:00 UTC
 
 jobs:
   build:

@@ -6,9 +6,8 @@
 window.MaterialMapConfig = {
     // GitHub OAuth Configuration
     github: {
-        // For development, you can use a test OAuth app
-        // In production, replace with your actual GitHub OAuth App client ID
-        clientId: 'YOUR_GITHUB_CLIENT_ID', // Replace with actual client ID
+        // GitHub OAuth App client ID
+        clientId: 'Ov23liawXcjJcsMDcAa7',
         
         // OAuth scopes required for the application
         scopes: 'public_repo user:email',
@@ -32,7 +31,10 @@ window.MaterialMapConfig = {
                 window.location.port === '5500', // VS Code Live Server
         
         // Mock OAuth for development
-        mockOAuth: true
+        mockOAuth: window.location.hostname === 'localhost' || 
+                  window.location.hostname === '127.0.0.1' ||
+                  window.location.hostname.includes('127.0.0.1') ||
+                  window.location.port === '5500'
     },
     
     // UI Configuration
