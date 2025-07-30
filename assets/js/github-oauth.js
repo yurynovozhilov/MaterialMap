@@ -6,7 +6,7 @@ class GitHubOAuth {
     constructor() {
         // GitHub OAuth configuration - will be set from config
         this.clientId = null;
-        this.redirectUri = window.location.origin + '/oauth-callback.html';
+        this.redirectUri = null; // Will be set from config
         this.scope = 'public_repo user:email';
         this.authUrl = 'https://github.com/login/oauth/authorize';
         
@@ -36,7 +36,12 @@ class GitHubOAuth {
             const config = window.MaterialMapConfig.github;
             this.clientId = config.clientId;
             this.scope = config.scopes || this.scope;
-            this.redirectUri = config.callbackUrl || this.redirectUri;
+            this.redirectUri = config.callbackUrl;
+        }
+        
+        // Fallback if no callback URL is set
+        if (!this.redirectUri) {
+            this.redirectUri = window.location.origin + '/oauth-callback.html';
         }
     }
 

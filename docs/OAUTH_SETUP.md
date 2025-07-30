@@ -22,9 +22,9 @@ For development and testing, OAuth works out of the box with mock authentication
 2. Click "New OAuth App"
 3. Fill in the application details:
    - **Application name**: `Material MAP`
-   - **Homepage URL**: `https://your-domain.com`
+   - **Homepage URL**: `https://yurynovozhilov.github.io/MaterialMap/`
    - **Application description**: `Material MAP - LS-DYNA Material Parameter Library`
-   - **Authorization callback URL**: `https://your-domain.com/oauth-callback.html`
+   - **Authorization callback URL**: `https://yurynovozhilov.github.io/MaterialMap/oauth-callback.html`
 
 4. Click "Register application"
 5. Note down the **Client ID** (you'll need this)

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Debug - Material MAP</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .debug-section {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .warning {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        pre {
+            background: #f1f3f4;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .test-button {
+            background: #28a745;
+        }
+        .test-button:hover {
+            background: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+    <h1>OAuth Configuration Debug</h1>
+    <p>This page helps debug GitHub OAuth configuration for Material MAP.</p>
+
+    <div id="config-info" class="debug-section">
+        <h3>Configuration Status</h3>
+        <div id="config-details">Loading...</div>
+    </div>
+
+    <div id="environment-info" class="debug-section">
+        <h3>Environment Information</h3>
+        <div id="env-details">Loading...</div>
+    </div>
+
+    <div id="oauth-urls" class="debug-section">
+        <h3>OAuth URLs</h3>
+        <div id="url-details">Loading...</div>
+    </div>
+
+    <div class="debug-section">
+        <h3>Test OAuth Flow</h3>
+        <p>Click the button below to test the OAuth authentication flow:</p>
+        <button id="test-oauth" class="test-button">Test OAuth Authentication</button>
+        <div id="oauth-result" style="margin-top: 1rem;"></div>
+    </div>
+
+    <div class="debug-section">
+        <h3>Current Session</h3>
+        <div id="session-info">Loading...</div>
+        <button id="clear-session">Clear Session Data</button>
+    </div>
+
+    <!-- Load configuration -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/github-oauth.js"></script>
+
+    <script>
+        // Debug OAuth Configuration
+        class OAuthDebugger {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.displayConfigInfo();
+                this.displayEnvironmentInfo();
+                this.displayOAuthUrls();
+                this.displaySessionInfo();
+                this.setupEventListeners();
+            }
+
+            displayConfigInfo() {
+                const configDiv = document.getElementById('config-details');
+                
+                if (!window.MaterialMapConfig) {
+                    configDiv.innerHTML = '<div class="error">❌ MaterialMapConfig not loaded</div>';
+                    return;
+                }
+
+                const config = window.MaterialMapConfig;
+                const github = config.github || {};
+                
+                let html = '<div class="success">✅ Configuration loaded successfully</div>';
+                
+                html += '<h4>GitHub Configuration:</h4>';
+                html += `<pre>${JSON.stringify(github, null, 2)}</pre>`;
+                
+                html += '<h4>Development Configuration:</h4>';
+                html += `<pre>${JSON.stringify(config.development, null, 2)}</pre>`;
+
+                // Validate configuration
+                const issues = [];
+                if (!github.clientId || github.clientId === 'YOUR_GITHUB_CLIENT_ID') {
+                    issues.push('Client ID not configured or using placeholder');
+                }
+                if (!github.callbackUrl) {
+                    issues.push('Callback URL not configured');
+                }
+                if (!github.repository || !github.repository.owner || !github.repository.name) {
+                    issues.push('Repository information incomplete');
+                }
+
+                if (issues.length > 0) {
+                    html += '<div class="warning"><h4>⚠️ Configuration Issues:</h4><ul>';
+                    issues.forEach(issue => html += `<li>${issue}</li>`);
+                    html += '</ul></div>';
+                }
+
+                configDiv.innerHTML = html;
+            }
+
+            displayEnvironmentInfo() {
+                const envDiv = document.getElementById('env-details');
+                
+                const info = {
+                    hostname: window.location.hostname,
+                    port: window.location.port,
+                    protocol: window.location.protocol,
+                    origin: window.location.origin,
+                    pathname: window.location.pathname,
+                    isDevelopment: this.isDevelopment(),
+                    isGitHubPages: window.location.hostname.includes('github.io')
+                };
+
+                let html = '<pre>' + JSON.stringify(info, null, 2) + '</pre>';
+                
+                if (info.isDevelopment) {
+                    html += '<div class="warning">⚠️ Development mode detected</div>';
+                } else if (info.isGitHubPages) {
+                    html += '<div class="success">✅ GitHub Pages environment detected</div>';
+                } else {
+                    html += '<div class="warning">⚠️ Unknown environment</div>';
+                }
+
+                envDiv.innerHTML = html;
+            }
+
+            displayOAuthUrls() {
+                const urlDiv = document.getElementById('url-details');
+                
+                if (!window.MaterialMapConfig || !window.MaterialMapConfig.github) {
+                    urlDiv.innerHTML = '<div class="error">❌ Cannot determine OAuth URLs - config not loaded</div>';
+                    return;
+                }
+
+                const config = window.MaterialMapConfig.github;
+                const authUrl = 'https://github.com/login/oauth/authorize';
+                const callbackUrl = config.callbackUrl;
+                
+                const params = new URLSearchParams({
+                    client_id: config.clientId || 'NOT_SET',
+                    redirect_uri: callbackUrl || 'NOT_SET',
+                    scope: config.scopes || 'public_repo user:email',
+                    state: 'debug_state_123',
+                    allow_signup: 'true'
+                });
+
+                const fullAuthUrl = `${authUrl}?${params.toString()}`;
+
+                let html = '<h4>OAuth URLs:</h4>';
+                html += `<p><strong>Authorization URL:</strong><br><code>${authUrl}</code></p>`;
+                html += `<p><strong>Callback URL:</strong><br><code>${callbackUrl || 'NOT_SET'}</code></p>`;
+                html += `<p><strong>Full Auth URL (for testing):</strong><br><code style="word-break: break-all;">${fullAuthUrl}</code></p>`;
+
+                // Validate URLs
+                const issues = [];
+                if (!callbackUrl) {
+                    issues.push('Callback URL is not set');
+                } else if (!callbackUrl.startsWith('https://')) {
+                    issues.push('Callback URL must use HTTPS');
+                } else if (window.location.hostname.includes('github.io') && !callbackUrl.includes('github.io')) {
+                    issues.push('Callback URL does not match GitHub Pages domain');
+                }
+
+                if (issues.length > 0) {
+                    html += '<div class="error"><h4>❌ URL Issues:</h4><ul>';
+                    issues.forEach(issue => html += `<li>${issue}</li>`);
+                    html += '</ul></div>';
+                }
+
+                urlDiv.innerHTML = html;
+            }
+
+            displaySessionInfo() {
+                const sessionDiv = document.getElementById('session-info');
+                
+                const sessionData = {
+                    github_oauth_token: sessionStorage.getItem('github_oauth_token'),
+                    github_oauth_user: sessionStorage.getItem('github_oauth_user'),
+                    github_oauth_expires: sessionStorage.getItem('github_oauth_expires'),
+                    github_oauth_state: sessionStorage.getItem('github_oauth_state'),
+                    github_oauth_client_id: sessionStorage.getItem('github_oauth_client_id'),
+                    github_oauth_code: sessionStorage.getItem('github_oauth_code')
+                };
+
+                let html = '<h4>Session Storage:</h4>';
+                html += '<pre>' + JSON.stringify(sessionData, null, 2) + '</pre>';
+
+                if (sessionData.github_oauth_token) {
+                    html += '<div class="success">✅ OAuth token found in session</div>';
+                    
+                    if (sessionData.github_oauth_expires) {
+                        const expires = parseInt(sessionData.github_oauth_expires);
+                        const now = Date.now();
+                        if (now > expires) {
+                            html += '<div class="warning">⚠️ Token has expired</div>';
+                        } else {
+                            const remaining = Math.round((expires - now) / 1000 / 60);
+                            html += `<div class="success">✅ Token valid for ${remaining} more minutes</div>`;
+                        }
+                    }
+                } else {
+                    html += '<div class="warning">⚠️ No OAuth token in session</div>';
+                }
+
+                sessionDiv.innerHTML = html;
+            }
+
+            setupEventListeners() {
+                document.getElementById('test-oauth').addEventListener('click', () => {
+                    this.testOAuth();
+                });
+
+                document.getElementById('clear-session').addEventListener('click', () => {
+                    this.clearSession();
+                });
+            }
+
+            async testOAuth() {
+                const resultDiv = document.getElementById('oauth-result');
+                resultDiv.innerHTML = '<div class="warning">🔄 Testing OAuth flow...</div>';
+
+                try {
+                    if (!window.GitHubOAuth) {
+                        throw new Error('GitHubOAuth class not loaded');
+                    }
+
+                    const oauth = new GitHubOAuth();
+                    const result = await oauth.authenticate();
+                    
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h4>✅ OAuth Test Successful!</h4>
+                            <p><strong>User:</strong> ${result.user.login} (${result.user.name})</p>
+                            <p><strong>Email:</strong> ${result.user.email}</p>
+                            <p><strong>Token:</strong> ${result.token.substring(0, 20)}...</p>
+                        </div>
+                    `;
+                    
+                    // Refresh session info
+                    this.displaySessionInfo();
+                    
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h4>❌ OAuth Test Failed</h4>
+                            <p><strong>Error:</strong> ${error.message}</p>
+                            <pre>${error.stack || 'No stack trace available'}</pre>
+                        </div>
+                    `;
+                }
+            }
+
+            clearSession() {
+                const keys = [
+                    'github_oauth_token',
+                    'github_oauth_user', 
+                    'github_oauth_expires',
+                    'github_oauth_state',
+                    'github_oauth_client_id',
+                    'github_oauth_code'
+                ];
+                
+                keys.forEach(key => sessionStorage.removeItem(key));
+                
+                this.displaySessionInfo();
+                
+                const resultDiv = document.getElementById('oauth-result');
+                resultDiv.innerHTML = '<div class="success">✅ Session data cleared</div>';
+            }
+
+            isDevelopment() {
+                return window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1' ||
+                       window.location.hostname.includes('127.0.0.1') ||
+                       window.location.port === '5500';
+            }
+        }
+
+        // Initialize debugger when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new OAuthDebugger();
+        });
+    </script>
+</body>
+</html>

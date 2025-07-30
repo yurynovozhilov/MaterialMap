@@ -13,7 +13,12 @@ window.MaterialMapConfig = {
         scopes: 'public_repo user:email',
         
         // Callback URL - should match what's configured in GitHub OAuth App
-        callbackUrl: window.location.origin + '/oauth-callback.html',
+        callbackUrl: window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1' ||
+                    window.location.hostname.includes('127.0.0.1') ||
+                    window.location.port === '5500' 
+                    ? window.location.origin + '/oauth-callback.html'
+                    : 'https://yurynovozhilov.github.io/MaterialMap/oauth-callback.html',
         
         // Repository information
         repository: {
