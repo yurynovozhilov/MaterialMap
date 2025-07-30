@@ -44,11 +44,28 @@ function updateThemeToggle(theme) {
   }
 }
 
-// Enhanced loading state management
+// Enhanced loading state management with error tracking
+let loadingState = {
+  totalFiles: 0,
+  processedFiles: 0,
+  failedFiles: [],
+  isOffline: false,
+  lastError: null
+};
+
 function showEnhancedLoading() {
   const loadingContainer = document.getElementById("loading-container");
   const legacyLoading = document.getElementById("loading");
   const errorContainer = document.getElementById("error-container");
+  
+  // Reset loading state
+  loadingState = {
+    totalFiles: 0,
+    processedFiles: 0,
+    failedFiles: [],
+    isOffline: !navigator.onLine,
+    lastError: null
+  };
   
   if (loadingContainer) {
     loadingContainer.style.display = "flex";
@@ -81,19 +98,48 @@ function updateLoadingProgress(current, total, details) {
   }
   
   if (loadingDetails && details) {
-    loadingDetails.textContent = details;
+    // Enhanced details with error information
+    let detailsText = details;
+    if (loadingState.failedFiles.length > 0) {
+      detailsText += ` (${loadingState.failedFiles.length} files failed)`;
+    }
+    if (loadingState.isOffline) {
+      detailsText += " [Offline Mode]";
+    }
+    loadingDetails.textContent = detailsText;
   }
 }
 
-function showEnhancedError(message, details) {
+function showEnhancedError(message, details, options = {}) {
   const errorContainer = document.getElementById("error-container");
   const errorDescription = document.getElementById("error-description");
   const legacyError = document.getElementById("error-message");
   
   hideEnhancedLoading();
   
+  // Store error in loading state
+  loadingState.lastError = { message, details, timestamp: new Date() };
+  
   if (errorContainer && errorDescription) {
-    errorDescription.textContent = details || message;
+    let errorText = details || message;
+    
+    // Add contextual information
+    if (loadingState.failedFiles.length > 0) {
+      errorText += `\n\nFailed files (${loadingState.failedFiles.length}): ${loadingState.failedFiles.slice(0, 3).join(', ')}`;
+      if (loadingState.failedFiles.length > 3) {
+        errorText += ` and ${loadingState.failedFiles.length - 3} more...`;
+      }
+    }
+    
+    if (loadingState.processedFiles > 0) {
+      errorText += `\n\nSuccessfully processed: ${loadingState.processedFiles} files`;
+    }
+    
+    if (options.isNetworkError && !navigator.onLine) {
+      errorText += "\n\nYou appear to be offline. Please check your internet connection.";
+    }
+    
+    errorDescription.textContent = errorText;
     errorContainer.style.display = "flex";
   } else {
     legacyError.textContent = message;
@@ -101,17 +147,115 @@ function showEnhancedError(message, details) {
   }
 }
 
-// Load materials from specified files
+// Network utilities
+async function fetchWithRetry(url, options = {}, maxRetries = 3) {
+  let lastError;
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: AbortSignal.timeout(10000) // 10 second timeout
+      });
+      
+      if (response.ok) {
+        return response;
+      }
+      
+      // If it's a client error (4xx), don't retry
+      if (response.status >= 400 && response.status < 500) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      // For server errors (5xx), retry
+      lastError = new Error(`HTTP ${response.status}: ${response.statusText}`);
+      
+    } catch (error) {
+      lastError = error;
+      
+      // Don't retry on timeout or network errors if offline
+      if (error.name === 'AbortError' || !navigator.onLine) {
+        break;
+      }
+    }
+    
+    // Wait before retry (exponential backoff)
+    if (attempt < maxRetries) {
+      await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+    }
+  }
+  
+  throw lastError;
+}
+
+// YAML validation and parsing with error boundaries
+function parseYAMLSafely(yamlText, fileName) {
+  try {
+    // Basic validation before parsing
+    if (!yamlText || typeof yamlText !== 'string') {
+      throw new Error('Invalid YAML content: empty or non-string input');
+    }
+    
+    if (yamlText.trim().length === 0) {
+      throw new Error('Invalid YAML content: empty file');
+    }
+    
+    // Parse YAML with security options
+    const parsed = jsyaml.load(yamlText, {
+      schema: jsyaml.CORE_SCHEMA,
+      json: false,
+      filename: fileName
+    });
+    
+    // Validate structure
+    if (!Array.isArray(parsed)) {
+      throw new Error('Invalid YAML structure: expected array of materials');
+    }
+    
+    if (parsed.length === 0) {
+      throw new Error('Invalid YAML content: empty materials array');
+    }
+    
+    // Validate each material has required structure
+    const validMaterials = [];
+    for (let i = 0; i < parsed.length; i++) {
+      const item = parsed[i];
+      if (!item || typeof item !== 'object' || !item.material) {
+        console.warn(`Skipping invalid material at index ${i} in ${fileName}`);
+        continue;
+      }
+      validMaterials.push(item);
+    }
+    
+    if (validMaterials.length === 0) {
+      throw new Error('No valid materials found in file');
+    }
+    
+    return validMaterials;
+    
+  } catch (error) {
+    // Enhance error message with context
+    const enhancedError = new Error(`YAML parsing failed in ${fileName}: ${error.message}`);
+    enhancedError.originalError = error;
+    enhancedError.fileName = fileName;
+    throw enhancedError;
+  }
+}
+
+// Load materials from specified files with enhanced error handling
 async function loadMaterials() {
   try {
     // Show enhanced loading indicator
     showEnhancedLoading();
     updateLoadingProgress(0, 100, "Loading file list...");
 
-    // Load file list
-    const fileListResponse = await fetch(`${basePath}/dist/file-list.json`);
-    if (!fileListResponse.ok) {
-      throw new Error(`Failed to fetch file list. Status: ${fileListResponse.status} ${fileListResponse.statusText}`);
+    // Load file list with retry mechanism
+    let fileListResponse;
+    try {
+      fileListResponse = await fetchWithRetry(`${basePath}/dist/file-list.json`);
+    } catch (error) {
+      const isNetworkError = !navigator.onLine || error.name === 'AbortError';
+      throw new Error(`Failed to fetch file list: ${error.message}${isNetworkError ? ' (Network Error)' : ''}`);
     }
 
     const fileList = await fileListResponse.json();
@@ -119,148 +263,219 @@ async function loadMaterials() {
       throw new Error("File list is empty or not valid.");
     }
 
+    // Initialize loading state
+    loadingState.totalFiles = fileList.length;
     let allMaterials = [];
     updateLoadingProgress(10, 100, `Found ${fileList.length} files to process...`);
 
-    // Sequentially load files from the list
+    // Process files with enhanced error handling
     for (let i = 0; i < fileList.length; i++) {
       const fileName = fileList[i];
       const progress = 10 + (i / fileList.length) * 80; // 10-90% for file processing
       updateLoadingProgress(progress, 100, `Processing ${fileName}...`);
       
       try {
-        const fileResponse = await fetch(`${basePath}/data/${fileName}`);
-        if (!fileResponse.ok) {
-          console.warn(`Failed to fetch file ${fileName}. Status: ${fileResponse.status}`);
-          continue;
-        }
-
+        // Fetch file with retry mechanism
+        const fileResponse = await fetchWithRetry(`${basePath}/data/${fileName}`);
         const yamlText = await fileResponse.text();
 
-        // Parse YAML with security options
-        let materialsInFile;
-        try {
-          materialsInFile = jsyaml.load(yamlText, {
-            // Security options to prevent code execution
-            schema: jsyaml.CORE_SCHEMA, // Use core schema to prevent arbitrary code execution
-            json: false // Disable JSON compatibility mode
-          });
-        } catch (yamlError) {
-          console.warn(`YAML parsing error in file ${fileName}: ${yamlError.message}`);
+        // Parse YAML with enhanced error boundaries
+        const materialsInFile = parseYAMLSafely(yamlText, fileName);
+        
+        allMaterials = allMaterials.concat(materialsInFile);
+        loadingState.processedFiles++;
+        
+        console.log(`Successfully processed ${fileName}: ${materialsInFile.length} materials`);
+        
+      } catch (fileError) {
+        // Track failed files with detailed error information
+        const errorInfo = {
+          fileName,
+          error: fileError.message,
+          type: fileError.name || 'Unknown',
+          timestamp: new Date()
+        };
+        
+        loadingState.failedFiles.push(fileName);
+        console.error(`Error processing file ${fileName}:`, fileError);
+        
+        // Continue processing other files - don't fail completely
+        continue;
+      }
+    }
+
+    // Handle partial success scenario
+    if (allMaterials.length === 0) {
+      const errorMsg = loadingState.failedFiles.length > 0 
+        ? `All ${loadingState.failedFiles.length} files failed to load`
+        : "No materials were successfully loaded";
+      throw new Error(errorMsg);
+    }
+
+    // Show warning for partial failures
+    if (loadingState.failedFiles.length > 0) {
+      console.warn(`Partial success: ${loadingState.processedFiles} files loaded, ${loadingState.failedFiles.length} files failed`);
+      updateLoadingProgress(85, 100, `Loaded ${allMaterials.length} materials with ${loadingState.failedFiles.length} file errors`);
+    }
+
+    // Prepare table data with error handling
+    const tableData = [];
+    let invalidMaterials = 0;
+    
+    for (const { material } of allMaterials) {
+      try {
+        if (!material || typeof material !== "object") {
+          invalidMaterials++;
           continue;
         }
 
-        if (Array.isArray(materialsInFile)) {
-          allMaterials = allMaterials.concat(materialsInFile);
-        } else {
-          console.warn(`File ${fileName} does not contain a valid array of materials.`);
-        }
-      } catch (fileError) {
-        console.error(`Error processing file ${fileName}:`, fileError);
+        // Create markup for the first column with proper sanitization
+        let materialModelHTML = `<div>${escapeHtml(material.id || "-")}/${escapeHtml(material.mat || "-")}</div>`;
+        if (material.mat_add) { materialModelHTML += `<div>${escapeHtml(material.mat_add)}</div>`; }
+        if (material.mat_thermal) { materialModelHTML += `<div>${escapeHtml(material.mat_thermal)}</div>`; }
+
+        // Return table rows with proper sanitization
+        tableData.push([
+          materialModelHTML,
+          escapeHtml(material.eos || "-"),
+          `<ul>${(material.app || [])
+            .map((app) => `<li>${escapeHtml(app)}</li>`)
+            .join("")}</ul>`,
+          formatDate(material.add),
+          material,
+        ]);
+      } catch (materialError) {
+        console.warn("Error processing material:", materialError);
+        invalidMaterials++;
       }
     }
 
-    if (allMaterials.length === 0) {
-      throw new Error("No materials were successfully loaded.");
+    if (invalidMaterials > 0) {
+      console.warn(`Skipped ${invalidMaterials} invalid materials`);
     }
-
-    // Prepare table data
-    const tableData = allMaterials.map(({ material }) => {
-      if (!material || typeof material !== "object") {
-        console.warn("Invalid material format", material);
-        return ["Invalid data", "-", "-", "-", null];
-      }
-
-      // Create markup for the first column with proper sanitization
-      let materialModelHTML = `<div>${escapeHtml(material.id || "-")}/${escapeHtml(material.mat || "-")}</div>`;
-      if (material.mat_add)     {materialModelHTML += `<div>${escapeHtml(material.mat_add)}</div>`}
-      if (material.mat_thermal) {materialModelHTML += `<div>${escapeHtml(material.mat_thermal)}</div>`}
-
-      // Return table rows with proper sanitization
-      return [
-        materialModelHTML,
-        escapeHtml(material.eos || "-"),
-        `<ul>${(material.app || [])
-          .map((app) => `<li>${escapeHtml(app)}</li>`)
-          .join("")}</ul>`,
-        formatDate(material.add),
-        material,
-      ];
-    });
 
     updateLoadingProgress(90, 100, "Initializing table...");
     
-    // Инициализация DataTable
-    const table = $("#materials-table").DataTable({
-      data: tableData,
-      columns: [
-        { title: "Material Model" },
-        { title: "EOS" },
-        { title: "Applications" },
-        { title: "Added" },
-        { visible: false },
-      ],
-      order: [[0, "asc"]], // Сортировка по первой колонке (индекс 0) в порядке возрастания (asc)
-      pageLength: 20,
-    });
+    // Initialize DataTable with error handling
+    let table;
+    try {
+      // Check if required libraries are loaded
+      if (typeof $ === 'undefined') {
+        throw new Error('jQuery is not loaded');
+      }
+      if (typeof $.fn.DataTable === 'undefined') {
+        throw new Error('DataTables library is not loaded');
+      }
+
+      table = $("#materials-table").DataTable({
+        data: tableData,
+        columns: [
+          { title: "Material Model" },
+          { title: "EOS" },
+          { title: "Applications" },
+          { title: "Added" },
+          { visible: false },
+        ],
+        order: [[0, "asc"]],
+        pageLength: 20,
+        language: {
+          emptyTable: "No materials available",
+          loadingRecords: "Loading materials...",
+          processing: "Processing materials...",
+          search: "Search materials:",
+          zeroRecords: "No matching materials found"
+        },
+        // Error handling for DataTable
+        drawCallback: function(settings) {
+          if (settings.json && settings.json.error) {
+            console.error('DataTable error:', settings.json.error);
+          }
+        }
+      });
+      
+      updateLoadingProgress(95, 100, "Setting up interactions...");
+
+      // Handle row click events with error boundaries
+      $("#materials-table tbody").on("click", "tr", function () {
+        try {
+          const tr = $(this);
+          const row = table.row(tr);
+          const rowData = row.data();
+          
+          if (!rowData || rowData.length < 5) {
+            console.warn("Invalid row data:", rowData);
+            return;
+          }
+          
+          const material = rowData[4];
+          if (!material) {
+            console.warn("No material data available for row:", rowData);
+            return;
+          }
+
+          if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass("shown");
+          } else {
+            const matDataHtml = material.mat_data
+              ? createCodeBlock("*MAT", material.mat_data)
+              : "";
+            const eosDataHtml = material.eos_data
+              ? createCodeBlock("*EOS", material.eos_data)
+              : "";
+            const matAddDataHtml = material.mat_add_data
+              ? createCodeBlock("*MAT_ADD", material.mat_add_data)
+              : "";
+            const matThermalDataHtml = material.mat_thermal_data
+              ? createCodeBlock("*MAT_THERMAL", material.mat_thermal_data)
+              : "";
+            const referenceHtml = material.ref
+              ? `<div class="reference-block"><strong>Reference: </strong><a href="${sanitizeUrl(material.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(material.ref)}</a></div>`
+              : `<div class="reference-block"><strong>Reference: </strong><a href="${sanitizeUrl(material.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(material.url)}</a></div>`;
+
+            row.child(
+              `${referenceHtml}${matDataHtml}${eosDataHtml}${matAddDataHtml}${matThermalDataHtml}`
+            ).show();
+            tr.addClass("shown");
+          }
+        } catch (rowError) {
+          console.error("Error handling row click:", rowError);
+        }
+      });
+
+    } catch (tableError) {
+      console.error("DataTable initialization failed:", tableError);
+      throw new Error(`Failed to initialize data table: ${tableError.message}`);
+    }
     
     updateLoadingProgress(100, 100, "Complete!");
 
-    // Обработка кликов для разворачивания строк
-    $("#materials-table tbody").on("click", "tr", function () 
-    {
-      const tr = $(this);
-      const row = table.row(tr);
-      const material = row.data()[4];
-
-      if (!material) 
-      {
-        console.warn("No material data available for row:", row.data());
-        return;
-      }
-
-      if (row.child.isShown()) 
-      {
-        row.child.hide();
-        tr.removeClass("shown");
-      } 
-
-      else 
-      {      
-        const matDataHtml = material.mat_data
-          ? createCodeBlock("*MAT", material.mat_data)
-          : ""; // Если mat_data нет, блок не создается
-        const eosDataHtml = material.eos_data
-          ? createCodeBlock("*EOS", material.eos_data)
-          : ""; // Если eos_data нет, блок не создается
-        const matAddDataHtml = material.mat_add_data
-          ? createCodeBlock("*MAT_ADD", material.mat_add_data)
-          : ""; // Если mat_add_data нет, блок не создается
-        const matThermalDataHtml = material.mat_thermal_data
-          ? createCodeBlock("*MAT_THERMAL", material.mat_thermal_data)
-          : ""; // Если mat_thermal_data нет, блок не создается
-        const referenceHtml = material.ref
-          ? `<div class="reference-block"><strong>Reference: </strong><a href="${sanitizeUrl(material.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(material.ref)}</a></div>`
-          :  `<div class="reference-block"><strong>Reference: </strong><a href="${sanitizeUrl(material.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(material.url)}</a></div>`;
-
-        row.child(
-          `${referenceHtml}${matDataHtml}${eosDataHtml}${matAddDataHtml}${matThermalDataHtml}`
-        ).show();
-        tr.addClass("shown");
-      }
-    });
-
-    console.log("Materials successfully loaded:", allMaterials);
+    // Log success with statistics
+    const stats = {
+      totalMaterials: allMaterials.length,
+      validTableRows: tableData.length,
+      processedFiles: loadingState.processedFiles,
+      failedFiles: loadingState.failedFiles.length,
+      invalidMaterials
+    };
+    console.log("Materials loading completed:", stats);
     
-    // Hide loading after a brief delay to show completion
-    setTimeout(() => {
-      hideEnhancedLoading();
-    }, 500);
-  } 
-  catch (error) 
-  {
+    // Show completion message with warnings if needed
+    if (loadingState.failedFiles.length > 0 || invalidMaterials > 0) {
+      setTimeout(() => {
+        hideEnhancedLoading();
+        // Could show a non-blocking notification about partial failures
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        hideEnhancedLoading();
+      }, 500);
+    }
+    
+  } catch (error) {
     console.error("Error details:", error);
-    showEnhancedError("Unable to load material data", error.message);
+    const isNetworkError = !navigator.onLine || error.message.includes('Network Error');
+    showEnhancedError("Unable to load material data", error.message, { isNetworkError });
   }
 }
 
@@ -344,6 +559,103 @@ function formatDate(dateString) {
   return `${day}.${month}.${year}`;
 }
 
+// Network status monitoring
+function setupNetworkMonitoring() {
+  // Monitor online/offline status
+  window.addEventListener('online', () => {
+    console.log('Network connection restored');
+    loadingState.isOffline = false;
+    
+    // Show a brief notification
+    showNetworkNotification('Connection restored', 'success');
+    
+    // If there was a previous error due to network issues, offer to retry
+    if (loadingState.lastError && loadingState.lastError.message.includes('Network Error')) {
+      setTimeout(() => {
+        if (confirm('Network connection restored. Would you like to retry loading materials?')) {
+          loadMaterials();
+        }
+      }, 1000);
+    }
+  });
+
+  window.addEventListener('offline', () => {
+    console.log('Network connection lost');
+    loadingState.isOffline = true;
+    showNetworkNotification('You are now offline', 'warning');
+  });
+}
+
+// Show network status notifications
+function showNetworkNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `network-notification ${type}`;
+  notification.textContent = message;
+  
+  // Style the notification
+  Object.assign(notification.style, {
+    position: 'fixed',
+    top: '20px',
+    right: '20px',
+    padding: '12px 20px',
+    borderRadius: '8px',
+    color: 'white',
+    fontWeight: '500',
+    zIndex: '10000',
+    opacity: '0',
+    transform: 'translateY(-20px)',
+    transition: 'all 0.3s ease'
+  });
+  
+  // Set background color based on type
+  const colors = {
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6'
+  };
+  notification.style.backgroundColor = colors[type] || colors.info;
+  
+  document.body.appendChild(notification);
+  
+  // Animate in
+  setTimeout(() => {
+    notification.style.opacity = '1';
+    notification.style.transform = 'translateY(0)';
+  }, 100);
+  
+  // Remove after delay
+  setTimeout(() => {
+    notification.style.opacity = '0';
+    notification.style.transform = 'translateY(-20px)';
+    setTimeout(() => {
+      if (notification.parentNode) {
+        document.body.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+}
+
+// Enhanced retry functionality
+function setupRetryMechanism() {
+  const retryButton = document.getElementById("retry-button");
+  if (retryButton) {
+    retryButton.addEventListener("click", () => {
+      // Clear previous error state
+      loadingState.lastError = null;
+      loadingState.failedFiles = [];
+      
+      // Check network status before retry
+      if (!navigator.onLine) {
+        showNetworkNotification('Please check your internet connection', 'warning');
+        return;
+      }
+      
+      loadMaterials();
+    });
+  }
+}
+
 // Load materials when the page opens
 window.addEventListener("load", () => {
   // Initialize theme
@@ -355,13 +667,11 @@ window.addEventListener("load", () => {
     themeToggle.addEventListener("click", toggleTheme);
   }
   
-  // Set up retry button
-  const retryButton = document.getElementById("retry-button");
-  if (retryButton) {
-    retryButton.addEventListener("click", () => {
-      loadMaterials();
-    });
-  }
+  // Set up network monitoring
+  setupNetworkMonitoring();
+  
+  // Set up enhanced retry mechanism
+  setupRetryMechanism();
   
   // Load materials
   loadMaterials();

@@ -303,6 +303,9 @@ a:focus {
     color: var(--text-secondary);
     margin-bottom: var(--spacing-md);
     line-height: 1.5;
+    white-space: pre-line; /* Preserve line breaks for better error formatting */
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .retry-button {
@@ -631,6 +634,52 @@ a:focus {
         min-width: auto;
         width: 100%;
     }
+}
+
+/* ==========================================================================
+   Network Notifications
+   ========================================================================== */
+.network-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: var(--font-size-sm);
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.network-notification.success {
+    background-color: var(--color-success);
+}
+
+.network-notification.warning {
+    background-color: var(--color-warning);
+}
+
+.network-notification.error {
+    background-color: var(--color-error);
+}
+
+.network-notification.info {
+    background-color: var(--color-info);
+}
+
+/* Responsive network notifications */
+@media (max-width: 768px) {
+    .network-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        text-align: center;
+    }
+}
     
     #materials-table th,
     #materials-table td {

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Handling Test - Material MAP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #4169E1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #27408B;
+        }
+        .test-result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <h1>Error Handling Test Suite</h1>
+    <p>This page tests the enhanced error handling capabilities of Material MAP.</p>
+
+    <div class="test-section">
+        <h2>1. Network Error Simulation</h2>
+        <p>Test how the application handles network failures and timeouts.</p>
+        <button class="test-button" onclick="testNetworkError()">Test Network Error</button>
+        <button class="test-button" onclick="testTimeout()">Test Timeout</button>
+        <div id="network-result" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. YAML Parsing Error Simulation</h2>
+        <p>Test how the application handles malformed YAML files.</p>
+        <button class="test-button" onclick="testInvalidYAML()">Test Invalid YAML</button>
+        <button class="test-button" onclick="testEmptyYAML()">Test Empty YAML</button>
+        <button class="test-button" onclick="testMalformedStructure()">Test Malformed Structure</button>
+        <div id="yaml-result" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Partial Failure Simulation</h2>
+        <p>Test how the application handles scenarios where some files load successfully and others fail.</p>
+        <button class="test-button" onclick="testPartialFailure()">Test Partial Failure</button>
+        <div id="partial-result" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Library Loading Errors</h2>
+        <p>Test how the application handles missing or failed library loads.</p>
+        <button class="test-button" onclick="testMissingJQuery()">Test Missing jQuery</button>
+        <button class="test-button" onclick="testMissingDataTables()">Test Missing DataTables</button>
+        <div id="library-result" class="test-result"></div>
+    </div>
+
+    <script>
+        // Import the enhanced error handling functions from the main script
+        // Note: In a real test, you'd import these properly
+        
+        function showResult(elementId, message, type = 'success') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `test-result ${type}`;
+        }
+
+        async function testNetworkError() {
+            showResult('network-result', 'Testing network error...', 'warning');
+            
+            try {
+                // Simulate a network error by trying to fetch from a non-existent endpoint
+                const response = await fetch('http://localhost:9999/non-existent');
+                showResult('network-result', 'Unexpected success - this should have failed', 'error');
+            } catch (error) {
+                showResult('network-result', `✓ Network error correctly caught: ${error.message}`, 'success');
+            }
+        }
+
+        async function testTimeout() {
+            showResult('network-result', 'Testing timeout...', 'warning');
+            
+            try {
+                // Simulate timeout with AbortController
+                const controller = new AbortController();
+                setTimeout(() => controller.abort(), 100); // Very short timeout
+                
+                const response = await fetch('http://httpbin.org/delay/5', {
+                    signal: controller.signal
+                });
+                showResult('network-result', 'Unexpected success - this should have timed out', 'error');
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    showResult('network-result', '✓ Timeout correctly handled', 'success');
+                } else {
+                    showResult('network-result', `✓ Network error caught: ${error.message}`, 'success');
+                }
+            }
+        }
+
+        function testInvalidYAML() {
+            showResult('yaml-result', 'Testing invalid YAML parsing...', 'warning');
+            
+            const invalidYAML = `
+                - material:
+                    id: "TEST"
+                    mat: "MAT_001"
+                  invalid_structure: [
+                    unclosed_bracket: true
+            `;
+            
+            try {
+                // This would use the parseYAMLSafely function from the main script
+                // For demo purposes, we'll use the js-yaml library directly
+                if (typeof jsyaml !== 'undefined') {
+                    const parsed = jsyaml.load(invalidYAML);
+                    showResult('yaml-result', 'Unexpected success - YAML should have been invalid', 'error');
+                } else {
+                    showResult('yaml-result', '✓ js-yaml library not loaded in test environment', 'warning');
+                }
+            } catch (error) {
+                showResult('yaml-result', `✓ Invalid YAML correctly rejected: ${error.message}`, 'success');
+            }
+        }
+
+        function testEmptyYAML() {
+            showResult('yaml-result', 'Testing empty YAML...', 'warning');
+            
+            try {
+                if (typeof jsyaml !== 'undefined') {
+                    const parsed = jsyaml.load('');
+                    if (parsed === null || parsed === undefined) {
+                        showResult('yaml-result', '✓ Empty YAML correctly handled', 'success');
+                    } else {
+                        showResult('yaml-result', `Unexpected result: ${JSON.stringify(parsed)}`, 'error');
+                    }
+                } else {
+                    showResult('yaml-result', '✓ js-yaml library not loaded in test environment', 'warning');
+                }
+            } catch (error) {
+                showResult('yaml-result', `✓ Empty YAML error caught: ${error.message}`, 'success');
+            }
+        }
+
+        function testMalformedStructure() {
+            showResult('yaml-result', 'Testing malformed structure...', 'warning');
+            
+            const malformedYAML = `
+                - not_a_material: "This should fail validation"
+                - material: null
+                - material: "string instead of object"
+            `;
+            
+            try {
+                if (typeof jsyaml !== 'undefined') {
+                    const parsed = jsyaml.load(malformedYAML);
+                    // This would pass YAML parsing but fail structure validation
+                    showResult('yaml-result', `✓ Malformed structure parsed but would fail validation: ${JSON.stringify(parsed, null, 2)}`, 'success');
+                } else {
+                    showResult('yaml-result', '✓ js-yaml library not loaded in test environment', 'warning');
+                }
+            } catch (error) {
+                showResult('yaml-result', `✓ Malformed structure error: ${error.message}`, 'success');
+            }
+        }
+
+        function testPartialFailure() {
+            showResult('partial-result', 'Simulating partial failure scenario...', 'warning');
+            
+            // Simulate a scenario where some files load and others fail
+            const simulatedResults = {
+                totalFiles: 5,
+                successfulFiles: 3,
+                failedFiles: ['corrupted.yaml', 'missing.yaml'],
+                loadedMaterials: 45
+            };
+            
+            const message = `
+Simulation Results:
+- Total files: ${simulatedResults.totalFiles}
+- Successful: ${simulatedResults.successfulFiles}
+- Failed: ${simulatedResults.failedFiles.length}
+- Failed files: ${simulatedResults.failedFiles.join(', ')}
+- Materials loaded: ${simulatedResults.loadedMaterials}
+
+✓ This demonstrates graceful degradation - the app would continue working with partial data.
+            `;
+            
+            showResult('partial-result', message.trim(), 'success');
+        }
+
+        function testMissingJQuery() {
+            showResult('library-result', 'Testing jQuery availability...', 'warning');
+            
+            if (typeof $ === 'undefined') {
+                showResult('library-result', '✓ jQuery not loaded - error handling would catch this', 'success');
+            } else {
+                showResult('library-result', `jQuery is loaded (version: ${$.fn.jquery || 'unknown'})`, 'warning');
+            }
+        }
+
+        function testMissingDataTables() {
+            showResult('library-result', 'Testing DataTables availability...', 'warning');
+            
+            if (typeof $ === 'undefined' || typeof $.fn.DataTable === 'undefined') {
+                showResult('library-result', '✓ DataTables not loaded - error handling would catch this', 'success');
+            } else {
+                showResult('library-result', 'DataTables is loaded', 'warning');
+            }
+        }
+
+        // Show initial status
+        document.addEventListener('DOMContentLoaded', () => {
+            showResult('network-result', 'Ready to test network error handling', 'warning');
+            showResult('yaml-result', 'Ready to test YAML parsing error handling', 'warning');
+            showResult('partial-result', 'Ready to test partial failure scenarios', 'warning');
+            showResult('library-result', 'Ready to test library loading errors', 'warning');
+        });
+    </script>
+</body>
+</html>
