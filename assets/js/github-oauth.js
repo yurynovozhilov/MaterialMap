@@ -13,7 +13,8 @@ class GitHubOAuth {
         // Development mode detection
         this.isDevelopment = window.location.hostname === 'localhost' || 
                            window.location.hostname === '127.0.0.1' ||
-                           window.location.hostname.includes('127.0.0.1');
+                           window.location.hostname.includes('127.0.0.1') ||
+                           window.location.port === '5500'; // VS Code Live Server
         
         // Since we're a static site, we'll use a proxy service for token exchange
         // You can use services like:
@@ -83,7 +84,8 @@ class GitHubOAuth {
                     // Provide more helpful error message
                     const isLocalhost = window.location.hostname === 'localhost' || 
                                       window.location.hostname === '127.0.0.1' ||
-                                      window.location.hostname.includes('127.0.0.1');
+                                      window.location.hostname.includes('127.0.0.1') ||
+                                      window.location.port === '5500';
                     
                     if (isLocalhost) {
                         throw new Error('Development mode detected but not properly configured. Please check that development.enabled and development.mockOAuth are set to true in config.js, or configure a real GitHub OAuth Client ID.');
