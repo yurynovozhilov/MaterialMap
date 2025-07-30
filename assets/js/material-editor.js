@@ -6,21 +6,49 @@
 // Core Material Editor Class
 class MaterialEditor {
     constructor() {
-        this.currentMaterial = null;
-        this.originalMaterial = null;
-        this.changeSet = null;
-        this.validationEngine = new ValidationEngine();
-        this.changeTracker = new ChangeTracker();
-        this.githubIntegration = new GitHubIntegration();
-        this.uiManager = new UIManager(this);
-        
-        this.initializeEditor();
+        try {
+            this.currentMaterial = null;
+            this.originalMaterial = null;
+            this.changeSet = null;
+            
+            console.log('Creating ValidationEngine...');
+            this.validationEngine = new ValidationEngine();
+            
+            console.log('Creating ChangeTracker...');
+            this.changeTracker = new ChangeTracker();
+            
+            console.log('Creating GitHubIntegration...');
+            this.githubIntegration = new GitHubIntegration();
+            
+            console.log('Creating UIManager...');
+            this.uiManager = new UIManager(this);
+            
+            console.log('Initializing editor...');
+            this.initializeEditor();
+            
+            console.log('MaterialEditor constructor completed successfully');
+        } catch (error) {
+            console.error('Error in MaterialEditor constructor:', error);
+            throw error;
+        }
     }
 
     initializeEditor() {
-        this.loadStoredChanges();
-        this.setupEventListeners();
-        this.initializeUI();
+        try {
+            console.log('Loading stored changes...');
+            this.loadStoredChanges();
+            
+            console.log('Setting up event listeners...');
+            this.setupEventListeners();
+            
+            console.log('Initializing UI...');
+            this.initializeUI();
+            
+            console.log('Editor initialization completed');
+        } catch (error) {
+            console.error('Error in initializeEditor:', error);
+            throw error;
+        }
     }
 
     // Material identification and loading

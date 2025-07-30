@@ -16,7 +16,7 @@ class UIManager {
         this.createEditModal();
         this.createAuthModal();
         this.setupEventListeners();
-        this.addEditButtons();
+        // this.addEditButtons(); // Temporarily disabled to avoid conflicts
     }
 
     // Mode management

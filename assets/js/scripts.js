@@ -345,9 +345,11 @@ async function loadMaterials() {
         if (material.mat_add) { materialModelHTML += `<div>${escapeHtml(material.mat_add)}</div>`; }
         if (material.mat_thermal) { materialModelHTML += `<div>${escapeHtml(material.mat_thermal)}</div>`; }
 
-        // Create edit button HTML
+        // Create edit button HTML with unique material identifier
+        const materialId = `material_${tableData.length}_${Date.now()}`;
         const editButtonHTML = `<button class="btn btn-edit btn-sm" 
-                                        onclick="handleEditMaterial(${tableData.length})" 
+                                        data-material-id="${materialId}"
+                                        onclick="handleEditMaterial(this)" 
                                         title="Suggest edit for this material">
                                    ✏️ Edit
                                  </button>`;
@@ -660,6 +662,13 @@ function showNetworkNotification(message, type = 'info') {
 function initializeMaterialEditor() {
   try {
     // Check if all required classes are available
+    console.log('Checking Material Editor components:');
+    console.log('MaterialEditor:', typeof MaterialEditor);
+    console.log('ChangeTracker:', typeof ChangeTracker);
+    console.log('ValidationEngine:', typeof ValidationEngine);
+    console.log('GitHubIntegration:', typeof GitHubIntegration);
+    console.log('UIManager:', typeof UIManager);
+    
     if (typeof MaterialEditor === 'undefined' || 
         typeof ChangeTracker === 'undefined' || 
         typeof ValidationEngine === 'undefined' || 
@@ -694,7 +703,7 @@ function addConnectionStatusIndicator() {
 }
 
 // Handle edit material button clicks
-function handleEditMaterial(rowIndex) {
+function handleEditMaterial(buttonElement) {
   try {
     if (!materialEditor) {
       console.warn('Material Editor not initialized');
@@ -702,9 +711,10 @@ function handleEditMaterial(rowIndex) {
       return;
     }
 
-    // Get the table and row data
+    // Get the table and find the row containing this button
     const table = $('#materials-table').DataTable();
-    const rowData = table.row(rowIndex).data();
+    const row = table.row($(buttonElement).closest('tr'));
+    const rowData = row.data();
     
     if (!rowData || rowData.length < 6) {
       console.error('Invalid row data for edit:', rowData);
@@ -721,13 +731,13 @@ function handleEditMaterial(rowIndex) {
 
     // Extract filename and index (this would need to be enhanced based on actual data structure)
     const filename = extractFilenameFromMaterial(material);
-    const materialIndex = extractMaterialIndexFromTable(rowIndex);
+    const materialIndex = extractMaterialIndexFromTable(row.index());
     
     // Start the edit session
     materialEditor.uiManager.startMaterialEdit(material, {
       filename: filename,
       index: materialIndex,
-      rowIndex: rowIndex
+      rowIndex: row.index()
     });
 
   } catch (error) {
