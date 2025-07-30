@@ -6,40 +6,48 @@ alwaysApply: true
 # Material MAP Information
 
 ## Summary
-Material MAP is a non-commercial, ad-free static website project that provides a library of material model parameter sets for LS-DYNA, sourced from open-access articles. The project aims to assist engineers in finding material model examples with proper citation information and direct links to original sources.
+Material MAP is a non-commercial, ad-free static website providing a library of material model parameter sets for LS-DYNA, sourced from open-access articles. It serves as a reference library for engineers to find examples of material model parameter sets with direct links to original sources and citation information.
 
 ## Structure
-- **data/**: Contains YAML files with material model parameters and metadata
-- **dist/**: Contains generated file list (file-list.json)
-- **.github/workflows/**: Contains GitHub Actions workflow for file list generation
+- **assets/**: Contains CSS, JavaScript, and HTML components
+- **config/**: Configuration files for the application
+- **data/**: YAML files containing material model parameters
+- **dist/**: Generated files (file-list.json)
+- **docs/**: Project documentation
+- **.github/**: GitHub workflows for CI/CD
 - **index.html**: Main application entry point
-- **scripts.js**: JavaScript code for the web application
-- **styles.css**: CSS styling for the website
-- **about.html**: Information page about the project
 
 ## Language & Runtime
-**Language**: JavaScript (Frontend), YAML (Data)
-**Runtime**: Web Browser
+**Language**: JavaScript (frontend), Python (development server)
+**Runtime**: Browser-based application with Node.js for build processes
 **Build System**: GitHub Actions workflow
-**Package Manager**: None (CDN-based dependencies)
+**Package Manager**: npm (for build dependencies only)
 
 ## Dependencies
 **Main Dependencies**:
-- js-yaml (v4.1.0) - YAML parser for JavaScript
-- jQuery (v3.7.0) - JavaScript library
-- DataTables (v1.13.7) - Table plugin for jQuery
+- js-yaml (4.1.0): YAML parsing library
+- jQuery: DOM manipulation
+- DataTables: Interactive table functionality
+
+**Development Dependencies**:
+- Node.js (v20): Used in GitHub Actions workflow
+- Python 3: Simple development server
 
 ## Build & Installation
 ```bash
-# No build process required for local development
-# GitHub Actions workflow automatically generates file-list.json on push to main branch
+# For local development
+python3 serve.py  # Starts a local server on port 8080
+
+# For production build (via GitHub Actions)
+npm install yamljs
+node -e "const fs = require('fs'); const path = require('path'); const dataDir = path.join(__dirname, 'data'); const files = fs.readdirSync(dataDir).filter(file => file.endsWith('.yaml')); fs.writeFileSync('dist/file-list.json', JSON.stringify(files, null, 2));"
 ```
 
 ## GitHub Actions
 **Workflow**: generate-file-list.yaml
 **Trigger**: Push to main branch or manual dispatch
 **Process**: 
-- Sets up Node.js environment
+- Sets up Node.js environment (v20)
 - Installs yamljs dependency
 - Generates file-list.json from YAML files in data directory
 - Commits and pushes the generated file
@@ -55,9 +63,8 @@ Material MAP is a non-commercial, ad-free static website project that provides a
   - URL to open-access source
   - Date added
 
-## Usage
-The website allows users to:
-- Browse material models in a searchable table
-- View detailed material parameters
-- Copy material data to clipboard
-- Access original research papers via direct links
+## Features
+**Material Editor**: Browser-based editor for material data
+**GitHub Integration**: PR-based contribution system
+**PWA Support**: Progressive Web App capabilities via manifest.json
+**Security**: Content Security Policy implementation

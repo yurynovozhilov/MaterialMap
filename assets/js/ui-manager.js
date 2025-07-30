@@ -229,9 +229,9 @@ class UIManager {
                                 </div>
                                 
                                 <div class="auth-option">
-                                    <h4>Option 2: OAuth (Coming Soon)</h4>
+                                    <h4>Option 2: OAuth (Recommended)</h4>
                                     <p>One-click authentication through GitHub OAuth</p>
-                                    <button id="auth-with-oauth" class="btn btn-secondary" disabled>Authenticate with GitHub</button>
+                                    <button id="auth-with-oauth" class="btn btn-primary">Authenticate with GitHub</button>
                                 </div>
                             </div>
                         </div>
@@ -320,6 +320,10 @@ class UIManager {
 
         document.getElementById('auth-with-token')?.addEventListener('click', () => {
             this.authenticateWithToken();
+        });
+
+        document.getElementById('auth-with-oauth')?.addEventListener('click', () => {
+            this.authenticateWithOAuth();
         });
 
         document.getElementById('auth-retry')?.addEventListener('click', () => {
@@ -723,6 +727,30 @@ class UIManager {
             
         } catch (error) {
             this.showAuthError(error.message);
+        }
+    }
+
+    async authenticateWithOAuth() {
+        try {
+            // Show loading state
+            const oauthButton = document.getElementById('auth-with-oauth');
+            const originalText = oauthButton.textContent;
+            oauthButton.disabled = true;
+            oauthButton.textContent = 'Opening GitHub...';
+
+            const user = await this.materialEditor.githubIntegration.authenticateWithOAuth();
+            this.showAuthStep('auth-step-2');
+            this.populateUserInfo(user);
+            
+        } catch (error) {
+            this.showAuthError(error.message);
+        } finally {
+            // Restore button state
+            const oauthButton = document.getElementById('auth-with-oauth');
+            if (oauthButton) {
+                oauthButton.disabled = false;
+                oauthButton.textContent = 'Authenticate with GitHub';
+            }
         }
     }
 

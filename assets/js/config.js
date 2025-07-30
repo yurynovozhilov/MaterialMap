@@ -1,0 +1,81 @@
+/**
+ * Configuration for Material MAP application
+ * This is the development configuration with mock OAuth enabled
+ */
+
+window.MaterialMapConfig = {
+    // GitHub OAuth Configuration
+    github: {
+        // For development, you can use a test OAuth app
+        // In production, replace with your actual GitHub OAuth App client ID
+        clientId: 'YOUR_GITHUB_CLIENT_ID', // Replace with actual client ID
+        
+        // OAuth scopes required for the application
+        scopes: 'public_repo user:email',
+        
+        // Callback URL - should match what's configured in GitHub OAuth App
+        callbackUrl: window.location.origin + '/oauth-callback.html',
+        
+        // Repository information
+        repository: {
+            owner: 'YuryNovozhilov',
+            name: 'MaterialMap'
+        }
+    },
+    
+    // Development settings
+    development: {
+        // Enable development mode (uses mock tokens)
+        enabled: window.location.hostname === 'localhost' || 
+                window.location.hostname === '127.0.0.1' ||
+                window.location.hostname.includes('127.0.0.1'),
+        
+        // Mock OAuth for development
+        mockOAuth: true
+    },
+    
+    // UI Configuration
+    ui: {
+        // Default authentication method to show first
+        defaultAuthMethod: 'oauth', // 'oauth' or 'token'
+        
+        // Show both authentication options
+        showTokenAuth: true,
+        showOAuthAuth: true
+    },
+    
+    // Token exchange service configuration (for production)
+    tokenExchange: {
+        // URL to your token exchange service
+        // Examples:
+        // Netlify: '/.netlify/functions/oauth-token'
+        // Vercel: '/api/oauth-token'
+        // Custom: 'https://your-api.com/oauth/token'
+        url: null // Set this for production
+    }
+};
+
+// Initialize OAuth client with configuration
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.GitHubOAuth && window.MaterialMapConfig) {
+        // Configure OAuth client
+        const oauthClient = new GitHubOAuth();
+        oauthClient.setClientId(window.MaterialMapConfig.github.clientId);
+        
+        // Set token exchange URL for production
+        if (window.MaterialMapConfig.tokenExchange && window.MaterialMapConfig.tokenExchange.url) {
+            oauthClient.setTokenExchangeUrl(window.MaterialMapConfig.tokenExchange.url);
+        }
+        
+        // Store global reference
+        window.materialMapOAuthClient = oauthClient;
+        
+        // Log configuration status
+        if (window.MaterialMapConfig.development.enabled) {
+            console.log('Material MAP OAuth: Development mode enabled');
+            if (window.MaterialMapConfig.development.mockOAuth) {
+                console.log('Material MAP OAuth: Using mock authentication');
+            }
+        }
+    }
+});

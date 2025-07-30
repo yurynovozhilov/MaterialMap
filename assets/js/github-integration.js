@@ -10,6 +10,9 @@ class GitHubIntegration {
         this.repoName = 'MaterialMap';     // Repository name
         this.baseUrl = 'https://api.github.com';
         
+        // Initialize OAuth client
+        this.oauthClient = new GitHubOAuth();
+        
         this.loadStoredAuth();
     }
 
@@ -30,6 +33,26 @@ class GitHubIntegration {
             this.token = null;
             this.user = null;
             throw new Error(`Authentication failed: ${error.message}`);
+        }
+    }
+
+    async authenticateWithOAuth() {
+        try {
+            // Use OAuth client for authentication
+            const result = await this.oauthClient.authenticate();
+            
+            this.token = result.token;
+            this.user = result.user;
+            
+            // Store authentication (OAuth client already stores in sessionStorage)
+            this.storeAuth(result.token, result.user);
+            
+            return result.user;
+            
+        } catch (error) {
+            this.token = null;
+            this.user = null;
+            throw new Error(`OAuth authentication failed: ${error.message}`);
         }
     }
 
@@ -59,6 +82,11 @@ class GitHubIntegration {
     logout() {
         this.token = null;
         this.user = null;
+        
+        // Clear OAuth data
+        this.oauthClient.logout();
+        
+        // Clear legacy token data
         localStorage.removeItem('github_token');
         localStorage.removeItem('github_user');
     }
@@ -74,6 +102,15 @@ class GitHubIntegration {
 
     loadStoredAuth() {
         try {
+            // First try to load OAuth authentication from sessionStorage
+            const oauthData = this.oauthClient.getStoredAuthData();
+            if (oauthData) {
+                this.token = oauthData.token;
+                this.user = oauthData.user;
+                return;
+            }
+            
+            // Fallback to localStorage for token-based auth (legacy)
             const storedToken = localStorage.getItem('github_token');
             const storedUser = localStorage.getItem('github_user');
             
