@@ -41,9 +41,6 @@ class MaterialEditor {
             console.log('Setting up event listeners...');
             this.setupEventListeners();
             
-            console.log('Initializing UI...');
-            this.initializeUI();
-            
             console.log('Editor initialization completed');
         } catch (error) {
             console.error('Error in initializeEditor:', error);
