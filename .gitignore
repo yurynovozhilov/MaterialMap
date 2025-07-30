@@ -70,7 +70,9 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+dist/*
+!dist/file-list.json
+!dist/.gitkeep
 downloads/
 eggs/
 .eggs/
