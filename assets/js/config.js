@@ -30,16 +30,18 @@ window.MaterialMapConfig = {
     // Development settings
     development: {
         // Enable development mode (uses mock tokens)
-        enabled: window.location.hostname === 'localhost' || 
-                window.location.hostname === '127.0.0.1' ||
-                window.location.hostname.includes('127.0.0.1') ||
-                window.location.port === '5500', // VS Code Live Server
+        // Temporarily enabled for production to bypass OAuth issues
+        enabled: true, // window.location.hostname === 'localhost' || 
+                // window.location.hostname === '127.0.0.1' ||
+                // window.location.hostname.includes('127.0.0.1') ||
+                // window.location.port === '5500', // VS Code Live Server
         
         // Mock OAuth for development
-        mockOAuth: window.location.hostname === 'localhost' || 
-                  window.location.hostname === '127.0.0.1' ||
-                  window.location.hostname.includes('127.0.0.1') ||
-                  window.location.port === '5500'
+        // Temporarily enabled for production to bypass OAuth issues
+        mockOAuth: true // window.location.hostname === 'localhost' || 
+                  // window.location.hostname === '127.0.0.1' ||
+                  // window.location.hostname.includes('127.0.0.1') ||
+                  // window.location.port === '5500'
     },
     
     // UI Configuration
