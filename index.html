@@ -32,8 +32,8 @@
                 integrity="sha384-cjmdOgDzOE22dUheI5E6Gzd3upfmReW8N1y/4jwKQE50KYcvFKZJA9JxWgQOzqwQ" 
                 crossorigin="anonymous" 
                 referrerpolicy="no-referrer"></script>
-        <link rel="stylesheet" href="assets/css/styles.css" />
-        <link rel="stylesheet" href="assets/css/material-editor.css" />
+        <link rel="stylesheet" href="src/assets/css/styles.css" />
+        <link rel="stylesheet" href="src/assets/css/material-editor.css" />
     </head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CR314DZ67Q"></script>
@@ -104,7 +104,7 @@
 
             <!-- Project Information -->
             <div class="about-link">
-                <p><a href="assets/html/about.html">Learn more about this project</a></p>
+                <p><a href="src/assets/html/about.html">Learn more about this project</a></p>
             </div>
         </div>
 
@@ -113,7 +113,7 @@
             // Register service worker for caching and offline functionality
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./assets/js/service-worker.js')
+                    navigator.serviceWorker.register('./src/assets/js/service-worker.js')
                         .then((registration) => {
                             console.log('SW registered: ', registration);
                         })
@@ -125,17 +125,17 @@
         </script>
 
         <!-- Configuration -->
-        <script src="assets/js/config.js"></script>
+        <script src="src/assets/js/config.js"></script>
         
         <!-- Material Editor Scripts -->
-        <script src="assets/js/change-tracker.js"></script>
-        <script src="assets/js/validation-engine.js"></script>
-        <script src="assets/js/github-oauth.js"></script>
-        <script src="assets/js/github-integration.js"></script>
-        <script src="assets/js/ui-manager.js"></script>
-        <script src="assets/js/material-editor.js"></script>
+        <script src="src/assets/js/change-tracker.js"></script>
+        <script src="src/assets/js/validation-engine.js"></script>
+        <script src="src/assets/js/github-oauth.js"></script>
+        <script src="src/assets/js/github-integration.js"></script>
+        <script src="src/assets/js/ui-manager.js"></script>
+        <script src="src/assets/js/material-editor.js"></script>
         
         <!-- Main Script -->
-        <script src="assets/js/scripts.js"></script>
+        <script src="src/assets/js/scripts.js"></script>
     </body>
 </html>

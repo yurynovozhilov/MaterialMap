@@ -10,9 +10,9 @@ const DATA_CACHE_NAME = 'material-map-data-v1.0.0';
 const STATIC_CACHE_URLS = [
     '/',
     '/index.html',
-    '/assets/html/about.html',
-    '/assets/css/styles.css',
-    '/assets/js/scripts.js',
+    '/src/assets/html/about.html',
+    '/src/assets/css/styles.css',
+    '/src/assets/js/scripts.js',
     '/manifest.json',
     
     // External CDN resources (will be cached on first request)

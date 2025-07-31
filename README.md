@@ -20,9 +20,45 @@ All site data is stored in multiple YAML files in the `data` directory, allowing
 - **User Contribution**: Contributions are encouraged, allowing users to add new material models or improve data accuracy.
 - **Collaborative Editing**: GitHub PR-based material editing system allows users to suggest improvements through a user-friendly interface.
 
+## Project Structure
+
+```
+MaterialMap/
+├── index.html              # Main application entry point
+├── README.md              # Project documentation
+├── manifest.json          # PWA manifest
+├── .gitignore            # Git ignore rules
+├── .htaccess             # Web server configuration
+├── src/                  # Source code
+│   ├── assets/           # Static assets
+│   │   ├── css/         # Stylesheets
+│   │   ├── js/          # JavaScript modules
+│   │   └── html/        # HTML components
+│   └── config/          # Configuration files
+├── data/                # Material model data (YAML files)
+├── docs/                # Project documentation
+├── tests/               # Unit and integration tests
+├── scripts/             # Development and build scripts
+│   ├── serve.py         # Development server
+│   ├── run-tests.sh     # Test runner
+│   └── *.html           # Test pages
+├── dist/                # Generated files
+└── .github/             # GitHub workflows
+```
+
 ## Quick Start
 
-Open `index.html` in your browser or visit the live site.
+### Local Development
+
+```bash
+# Start development server
+python3 scripts/serve.py
+
+# Or run all tests and start server
+./scripts/run-tests.sh
+```
+
+Open `http://localhost:8080` in your browser.
 
 ## Testing
 
@@ -31,6 +67,12 @@ Open `index.html` in your browser or visit the live site.
 The project includes comprehensive unit and integration tests:
 
 ```bash
+# Run all tests (including browser tests)
+./scripts/run-tests.sh
+
+# Or run individual components:
+cd scripts
+
 # Install dependencies
 npm install
 
@@ -42,9 +84,6 @@ npm run test:coverage
 
 # Run tests in watch mode
 npm run test:watch
-
-# Run all tests (including browser tests)
-./run-tests.sh
 ```
 
 ### Test Coverage

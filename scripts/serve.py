@@ -9,8 +9,8 @@ import os
 import sys
 from pathlib import Path
 
-# Change to the script directory
-os.chdir(Path(__file__).parent)
+# Change to the project root directory (parent of scripts)
+os.chdir(Path(__file__).parent.parent)
 
 PORT = 8080
 

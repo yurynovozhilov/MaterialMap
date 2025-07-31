@@ -17,8 +17,8 @@ window.MaterialMapConfig = {
                     window.location.hostname === '127.0.0.1' ||
                     window.location.hostname.includes('127.0.0.1') ||
                     window.location.port === '5500' 
-                    ? window.location.origin + '/oauth-callback.html'
-                    : 'https://yurynovozhilov.github.io/MaterialMap/oauth-callback.html',
+                    ? window.location.origin + '/scripts/oauth-callback.html'
+                    : 'https://yurynovozhilov.github.io/MaterialMap/scripts/oauth-callback.html',
         
         // Repository information
         repository: {
