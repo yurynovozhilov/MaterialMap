@@ -179,8 +179,14 @@ class GitHubOAuth {
         try {
             // Verify state matches
             const storedState = sessionStorage.getItem('github_oauth_state');
+            console.log('OAuth state verification:', {
+                received: data.state,
+                stored: storedState,
+                match: data.state === storedState
+            });
+            
             if (data.state !== storedState) {
-                throw new Error('Invalid state parameter');
+                throw new Error('Invalid state parameter - CSRF protection failed');
             }
 
             // Exchange code for access token

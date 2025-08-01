@@ -89,6 +89,12 @@
                 const error = urlParams.get('error');
                 const state = urlParams.get('state');
 
+                console.log('OAuth callback received:', {
+                    code: code ? 'present' : 'missing',
+                    error: error,
+                    state: state ? 'present' : 'missing'
+                });
+
                 if (error) {
                     this.handleError(error, urlParams.get('error_description'));
                     return;
@@ -99,36 +105,29 @@
                     return;
                 }
 
-                // Verify state parameter to prevent CSRF attacks
-                const storedState = sessionStorage.getItem('github_oauth_state');
-                if (!state || state !== storedState) {
-                    this.handleError('invalid_state', 'Invalid state parameter - possible CSRF attack');
-                    return;
-                }
-
-                this.exchangeCodeForToken(code);
+                // Pass state verification to parent window
+                // (popup window doesn't have access to parent's sessionStorage)
+                this.exchangeCodeForToken(code, state);
             }
 
-            async exchangeCodeForToken(code) {
+            async exchangeCodeForToken(code, state) {
                 try {
-                    // Get client ID from sessionStorage (set by parent window)
-                    const clientId = sessionStorage.getItem('github_oauth_client_id');
-                    if (!clientId) {
-                        throw new Error('Client ID not found');
-                    }
-
                     // Since we're a static site, we need to use GitHub's device flow
                     // or a proxy service. For now, we'll use the implicit flow approach
                     // where the parent window handles the token exchange.
                     
                     // Send the code back to the parent window
                     if (window.opener) {
+                        console.log('Sending OAuth data to parent window:', {
+                            code: code ? 'present' : 'missing',
+                            state: state ? 'present' : 'missing'
+                        });
+                        
                         window.opener.postMessage({
                             type: 'github_oauth_callback',
                             success: true,
                             code: code,
-                            state: sessionStorage.getItem('github_oauth_state'),
-                            clientId: clientId
+                            state: state
                         }, window.location.origin);
                         
                         this.showSuccess();
@@ -138,8 +137,9 @@
                             window.close();
                         }, 2000);
                     } else {
-                        // Fallback: store code in sessionStorage and redirect
+                        // Fallback: store code and state in sessionStorage and redirect
                         sessionStorage.setItem('github_oauth_code', code);
+                        sessionStorage.setItem('github_oauth_callback_state', state);
                         this.showSuccess();
                         
                         setTimeout(() => {
