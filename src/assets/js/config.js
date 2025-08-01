@@ -45,10 +45,10 @@ window.MaterialMapConfig = {
     // UI Configuration
     ui: {
         // Default authentication method to show first
-        defaultAuthMethod: 'oauth', // 'oauth' or 'token'
+        defaultAuthMethod: 'oauth', // only 'oauth' is supported now
         
-        // Show both authentication options
-        showTokenAuth: true,
+        // Show only OAuth authentication
+        showTokenAuth: false,
         showOAuthAuth: true
     },
     

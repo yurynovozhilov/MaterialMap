@@ -112,16 +112,19 @@
 
             async exchangeCodeForToken(code, state) {
                 try {
-                    // Since we're a static site, we need to use GitHub's device flow
-                    // or a proxy service. For now, we'll use the implicit flow approach
-                    // where the parent window handles the token exchange.
-                    
                     // Send the code back to the parent window
                     if (window.opener) {
                         console.log('Sending OAuth data to parent window:', {
                             code: code ? 'present' : 'missing',
                             state: state ? 'present' : 'missing'
                         });
+                        
+                        // Clear any existing state to prevent conflicts
+                        try {
+                            window.opener.sessionStorage.removeItem('github_oauth_state_conflict');
+                        } catch (e) {
+                            // Ignore cross-origin errors
+                        }
                         
                         window.opener.postMessage({
                             type: 'github_oauth_callback',
@@ -135,7 +138,7 @@
                         // Close the popup after a short delay
                         setTimeout(() => {
                             window.close();
-                        }, 2000);
+                        }, 1500);
                     } else {
                         // Fallback: store code and state in sessionStorage and redirect
                         sessionStorage.setItem('github_oauth_code', code);
@@ -149,7 +152,7 @@
                             } else {
                                 window.location.href = '/index.html';
                             }
-                        }, 2000);
+                        }, 1500);
                     }
 
                 } catch (error) {

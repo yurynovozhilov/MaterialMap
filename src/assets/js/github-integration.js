@@ -35,33 +35,7 @@ class GitHubIntegration {
         }
     }
 
-    async authenticateWithToken(token) {
-        try {
-            // Validate token by getting user info
-            this.token = token;
-            const user = await this.makeRequest('/user');
-            
-            this.user = user;
-            
-            // Store token in sessionStorage for persistence
-            sessionStorage.setItem('github_pat_token', token);
-            sessionStorage.setItem('github_pat_user', JSON.stringify(user));
-            sessionStorage.setItem('github_pat_expires', Date.now() + (24 * 3600 * 1000)); // 24 hours
-            
-            return user;
-            
-        } catch (error) {
-            this.token = null;
-            this.user = null;
-            
-            // Clear any stored PAT data
-            sessionStorage.removeItem('github_pat_token');
-            sessionStorage.removeItem('github_pat_user');
-            sessionStorage.removeItem('github_pat_expires');
-            
-            throw new Error(`Personal Access Token authentication failed: ${error.message}`);
-        }
-    }
+
 
     async getCurrentUser() {
         if (this.user && this.token) {
@@ -92,11 +66,6 @@ class GitHubIntegration {
         
         // Clear OAuth data
         this.oauthClient.logout();
-        
-        // Clear Personal Access Token data
-        sessionStorage.removeItem('github_pat_token');
-        sessionStorage.removeItem('github_pat_user');
-        sessionStorage.removeItem('github_pat_expires');
     }
 
     loadStoredAuth() {
@@ -109,23 +78,7 @@ class GitHubIntegration {
                 return;
             }
             
-            // If no OAuth data, try to load Personal Access Token
-            const patToken = sessionStorage.getItem('github_pat_token');
-            const patUserJson = sessionStorage.getItem('github_pat_user');
-            const patExpires = sessionStorage.getItem('github_pat_expires');
-            
-            if (patToken && patUserJson && patExpires) {
-                const expiresTime = parseInt(patExpires);
-                if (Date.now() < expiresTime) {
-                    this.token = patToken;
-                    this.user = JSON.parse(patUserJson);
-                } else {
-                    // Token expired, clear it
-                    sessionStorage.removeItem('github_pat_token');
-                    sessionStorage.removeItem('github_pat_user');
-                    sessionStorage.removeItem('github_pat_expires');
-                }
-            }
+
         } catch (error) {
             console.warn('Failed to load stored authentication:', error);
             this.logout();

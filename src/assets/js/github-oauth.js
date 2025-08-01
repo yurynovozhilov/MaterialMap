@@ -100,10 +100,23 @@ class GitHubOAuth {
                 }
             }
 
+            // Force cleanup any existing OAuth state to prevent conflicts
+            this.forceCleanupOAuthState();
+            
             // Generate and store state for CSRF protection
             const state = this.generateState();
+            
+            // Store new state
             sessionStorage.setItem('github_oauth_state', state);
             sessionStorage.setItem('github_oauth_client_id', this.clientId);
+            
+            // Add timestamp for debugging
+            sessionStorage.setItem('github_oauth_timestamp', Date.now().toString());
+            
+            console.log('OAuth state generated and stored:', {
+                state: state.substring(0, 8) + '...',
+                timestamp: Date.now()
+            });
 
             // Build authorization URL
             const params = new URLSearchParams({
@@ -154,8 +167,18 @@ class GitHubOAuth {
      */
     setupMessageListener() {
         window.addEventListener('message', (event) => {
+            console.log('OAuth message received:', {
+                origin: event.origin,
+                expectedOrigin: window.location.origin,
+                type: event.data?.type,
+                success: event.data?.success,
+                hasState: !!event.data?.state,
+                hasCode: !!event.data?.code
+            });
+
             // Verify origin for security
             if (event.origin !== window.location.origin) {
+                console.warn('OAuth message from unexpected origin:', event.origin);
                 return;
             }
 
@@ -185,8 +208,17 @@ class GitHubOAuth {
                 match: data.state === storedState
             });
             
+            // Enhanced state verification with better error handling
+            if (!data.state || !storedState) {
+                console.error('OAuth state missing:', { received: data.state, stored: storedState });
+                throw new Error('OAuth state parameter missing - authentication failed');
+            }
+            
             if (data.state !== storedState) {
-                throw new Error('Invalid state parameter - CSRF protection failed');
+                console.error('OAuth state mismatch:', { received: data.state, stored: storedState });
+                // Clear potentially corrupted state
+                sessionStorage.removeItem('github_oauth_state');
+                throw new Error('Invalid state parameter - CSRF protection failed. Please try again.');
             }
 
             // Exchange code for access token
@@ -219,11 +251,34 @@ class GitHubOAuth {
     handleOAuthError(data) {
         console.error('OAuth error:', data);
         
-        this.cleanupOAuthState();
+        // Force cleanup of all OAuth-related data
+        this.forceCleanupOAuthState();
         
         if (this.authPromise) {
             this.authPromise.reject(new Error(data.description || data.error));
             this.authPromise = null;
+        }
+    }
+
+    /**
+     * Force cleanup of all OAuth state data (more thorough than regular cleanup)
+     */
+    forceCleanupOAuthState() {
+        // Regular cleanup
+        this.cleanupOAuthState();
+        
+        // Additional cleanup for potential conflicts
+        try {
+            const keysToRemove = [];
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                if (key && key.startsWith('github_oauth')) {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach(key => sessionStorage.removeItem(key));
+        } catch (error) {
+            console.warn('Failed to force cleanup OAuth state:', error);
         }
     }
 
@@ -418,6 +473,8 @@ class GitHubOAuth {
         sessionStorage.removeItem('github_oauth_state');
         sessionStorage.removeItem('github_oauth_client_id');
         sessionStorage.removeItem('github_oauth_code');
+        sessionStorage.removeItem('github_oauth_timestamp');
+        sessionStorage.removeItem('github_oauth_state_conflict');
     }
 
     /**
