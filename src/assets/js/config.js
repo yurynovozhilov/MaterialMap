@@ -17,8 +17,8 @@ window.MaterialMapConfig = {
                     window.location.hostname === '127.0.0.1' ||
                     window.location.hostname.includes('127.0.0.1') ||
                     window.location.port === '5500' 
-                    ? window.location.origin + '/oauth-callback.html'
-                    : 'https://yurynovozhilov.github.io/MaterialMap/oauth-callback.html',
+                    ? window.location.origin + '/oauth-callback-modern.html'
+                    : 'https://yurynovozhilov.github.io/MaterialMap/oauth-callback-modern.html',
         
         // Repository information
         repository: {
@@ -65,15 +65,9 @@ window.MaterialMapConfig = {
 
 // Initialize OAuth client with configuration
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.GitHubOAuth && window.MaterialMapConfig) {
-        // Configure OAuth client
-        const oauthClient = new GitHubOAuth();
-        oauthClient.setClientId(window.MaterialMapConfig.github.clientId);
-        
-        // Set token exchange URL for production
-        if (window.MaterialMapConfig.tokenExchange && window.MaterialMapConfig.tokenExchange.url) {
-            oauthClient.setTokenExchangeUrl(window.MaterialMapConfig.tokenExchange.url);
-        }
+    // Initialize modern OAuth client
+    if (window.ModernGitHubOAuth && window.MaterialMapConfig) {
+        const oauthClient = new ModernGitHubOAuth();
         
         // Store global reference
         window.materialMapOAuthClient = oauthClient;
@@ -85,5 +79,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Material MAP OAuth: Using mock authentication');
             }
         }
+        
+        console.log('Modern OAuth client initialized');
+    }
+    
+    // Fallback to old OAuth client if modern one is not available
+    else if (window.GitHubOAuth && window.MaterialMapConfig) {
+        console.warn('Using legacy OAuth client - consider upgrading');
+        const oauthClient = new GitHubOAuth();
+        oauthClient.setClientId(window.MaterialMapConfig.github.clientId);
+        
+        if (window.MaterialMapConfig.tokenExchange && window.MaterialMapConfig.tokenExchange.url) {
+            oauthClient.setTokenExchangeUrl(window.MaterialMapConfig.tokenExchange.url);
+        }
+        
+        window.materialMapOAuthClient = oauthClient;
     }
 });
