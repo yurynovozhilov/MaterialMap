@@ -17,8 +17,8 @@ window.MaterialMapConfig = {
                     window.location.hostname === '127.0.0.1' ||
                     window.location.hostname.includes('127.0.0.1') ||
                     window.location.port === '5500' 
-                    ? window.location.origin + '/scripts/oauth-callback.html'
-                    : 'https://yurynovozhilov.github.io/MaterialMap/scripts/oauth-callback.html',
+                    ? window.location.origin + '/oauth-callback.html'
+                    : 'https://yurynovozhilov.github.io/MaterialMap/oauth-callback.html',
         
         // Repository information
         repository: {
@@ -30,18 +30,16 @@ window.MaterialMapConfig = {
     // Development settings
     development: {
         // Enable development mode (uses mock tokens)
-        // Temporarily enabled for production to bypass OAuth issues
-        enabled: true, // window.location.hostname === 'localhost' || 
-                // window.location.hostname === '127.0.0.1' ||
-                // window.location.hostname.includes('127.0.0.1') ||
-                // window.location.port === '5500', // VS Code Live Server
+        enabled: window.location.hostname === 'localhost' || 
+                window.location.hostname === '127.0.0.1' ||
+                window.location.hostname.includes('127.0.0.1') ||
+                window.location.port === '5500', // VS Code Live Server
         
         // Mock OAuth for development
-        // Temporarily enabled for production to bypass OAuth issues
-        mockOAuth: true // window.location.hostname === 'localhost' || 
-                  // window.location.hostname === '127.0.0.1' ||
-                  // window.location.hostname.includes('127.0.0.1') ||
-                  // window.location.port === '5500'
+        mockOAuth: window.location.hostname === 'localhost' || 
+                  window.location.hostname === '127.0.0.1' ||
+                  window.location.hostname.includes('127.0.0.1') ||
+                  window.location.port === '5500'
     },
     
     // UI Configuration
