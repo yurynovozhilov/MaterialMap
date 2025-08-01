@@ -401,7 +401,7 @@ a:focus {
     background: var(--bg-secondary);
     padding: var(--spacing-lg);
     border-radius: var(--radius-md);
-    margin-bottom: var(--spacing-lg);
+    margin: 0 auto var(--spacing-lg) auto;
     border-left: 4px solid var(--color-primary);
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -461,7 +461,7 @@ a:focus {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    margin: var(--spacing-lg) 0;
+    margin: var(--spacing-lg) auto;
     overflow: hidden;
     box-shadow: var(--shadow-sm);
     width: 90ch;
