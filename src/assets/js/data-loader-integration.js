@@ -241,15 +241,6 @@ function convertEnhancedDataToTableFormat(materials) {
                 materialModelHTML += `<div>${escapeHtml(material.mat_thermal)}</div>`; 
             }
 
-            // Create edit button HTML with unique material identifier
-            const materialId = material.uniqueId || `material_${tableData.length}_${Date.now()}`;
-            const editButtonHTML = `<button class="btn btn-edit btn-sm" 
-                                            data-material-id="${materialId}"
-                                            onclick="handleEditMaterial(this)" 
-                                            title="Suggest edit for this material">
-                                       ✏️ Edit
-                                     </button>`;
-
             // Enhanced data includes category and tags
             const categoryBadge = material.metadata?.category ? 
                 `<span class="category-badge category-${material.metadata.category}">${material.metadata.category}</span>` : '';
@@ -262,7 +253,6 @@ function convertEnhancedDataToTableFormat(materials) {
                     .map((app) => `<li>${escapeHtml(app)}</li>`)
                     .join("")}</ul>`,
                 formatDate(material.add),
-                editButtonHTML,
                 material, // Keep material data in hidden column
             ]);
         } catch (materialError) {
@@ -295,15 +285,6 @@ function convertLegacyDataToTableFormat(allMaterials) {
             if (material.mat_add) { materialModelHTML += `<div>${escapeHtml(material.mat_add)}</div>`; }
             if (material.mat_thermal) { materialModelHTML += `<div>${escapeHtml(material.mat_thermal)}</div>`; }
 
-            // Create edit button HTML with unique material identifier
-            const materialId = `material_${tableData.length}_${Date.now()}`;
-            const editButtonHTML = `<button class="btn btn-edit btn-sm" 
-                                            data-material-id="${materialId}"
-                                            onclick="handleEditMaterial(this)" 
-                                            title="Suggest edit for this material">
-                                       ✏️ Edit
-                                     </button>`;
-
             // Return table rows with proper sanitization
             tableData.push([
                 materialModelHTML,
@@ -312,7 +293,6 @@ function convertLegacyDataToTableFormat(allMaterials) {
                     .map((app) => `<li>${escapeHtml(app)}</li>`)
                     .join("")}</ul>`,
                 formatDate(material.add),
-                editButtonHTML,
                 material, // Keep material data in hidden column
             ]);
         } catch (materialError) {
