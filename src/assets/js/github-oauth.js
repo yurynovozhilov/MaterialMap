@@ -266,8 +266,28 @@ class GitHubOAuth {
 
             return await response.json();
         } else {
-            // No token exchange service configured
-            throw new Error('OAuth token exchange service not configured. Please set up a backend service or enable development mode.');
+            // For static sites without backend, we can't securely exchange OAuth codes for tokens
+            // because it requires a client_secret that cannot be exposed in frontend code.
+            // 
+            // Solutions for static sites:
+            // 1. Use GitHub Apps with installation tokens (more complex)
+            // 2. Use a serverless function (Netlify/Vercel Functions)
+            // 3. Use a third-party OAuth proxy service
+            // 4. Ask users to provide Personal Access Tokens directly
+            
+            console.error('OAuth token exchange not possible for static sites without backend');
+            
+            // Provide helpful error message to users
+            throw new Error(`
+                OAuth authentication requires a backend service to securely exchange tokens.
+                
+                For static sites, please use one of these alternatives:
+                1. Set up a serverless function (Netlify/Vercel Functions)
+                2. Use Personal Access Tokens instead of OAuth
+                3. Deploy with a backend service
+                
+                Contact the site administrator to set up proper OAuth backend.
+            `.trim());
         }
     }
 

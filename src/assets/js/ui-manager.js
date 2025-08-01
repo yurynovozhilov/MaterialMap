@@ -214,6 +214,24 @@ class UIManager {
                                     <p>One-click authentication through GitHub OAuth</p>
                                     <button id="auth-with-oauth" class="btn btn-primary">Authenticate with GitHub</button>
                                 </div>
+                                
+                                <div class="auth-divider">
+                                    <span>or</span>
+                                </div>
+                                
+                                <div class="auth-option">
+                                    <h4>Personal Access Token</h4>
+                                    <p>Use your GitHub Personal Access Token for authentication</p>
+                                    <div class="pat-input-group">
+                                        <input type="password" id="pat-token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="form-control">
+                                        <button id="auth-with-pat" class="btn btn-secondary">Authenticate</button>
+                                    </div>
+                                    <small class="help-text">
+                                        <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=MaterialMap%20Editor" target="_blank">
+                                            Create a Personal Access Token
+                                        </a> with 'public_repo' scope
+                                    </small>
+                                </div>
                             </div>
                         </div>
                         
@@ -301,6 +319,17 @@ class UIManager {
 
         document.getElementById('auth-with-oauth')?.addEventListener('click', () => {
             this.authenticateWithOAuth();
+        });
+
+        document.getElementById('auth-with-pat')?.addEventListener('click', () => {
+            this.authenticateWithPAT();
+        });
+
+        // Allow Enter key in PAT input field
+        document.getElementById('pat-token-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.authenticateWithPAT();
+            }
         });
 
         document.getElementById('auth-retry')?.addEventListener('click', () => {
@@ -709,6 +738,58 @@ class UIManager {
         }
     }
 
+    async authenticateWithPAT() {
+        try {
+            // Get token from input
+            const tokenInput = document.getElementById('pat-token-input');
+            const token = tokenInput.value.trim();
+            
+            if (!token) {
+                this.showAuthError('Please enter your Personal Access Token');
+                return;
+            }
+            
+            // Validate token format (GitHub PAT format)
+            if (!token.match(/^gh[ps]_[A-Za-z0-9_]{36,255}$/)) {
+                this.showAuthError('Invalid token format. Please enter a valid GitHub Personal Access Token (starts with ghp_ or ghs_)');
+                return;
+            }
+            
+            // Show loading state
+            const patButton = document.getElementById('auth-with-pat');
+            const originalText = patButton.textContent;
+            patButton.disabled = true;
+            patButton.textContent = 'Authenticating...';
+            
+            // Disable input
+            tokenInput.disabled = true;
+
+            const user = await this.materialEditor.githubIntegration.authenticateWithToken(token);
+            
+            // Clear the input for security
+            tokenInput.value = '';
+            
+            this.showAuthStep('auth-step-2');
+            this.populateUserInfo(user);
+            
+        } catch (error) {
+            this.showAuthError(error.message);
+        } finally {
+            // Restore button and input state
+            const patButton = document.getElementById('auth-with-pat');
+            const tokenInput = document.getElementById('pat-token-input');
+            
+            if (patButton) {
+                patButton.disabled = false;
+                patButton.textContent = 'Authenticate';
+            }
+            
+            if (tokenInput) {
+                tokenInput.disabled = false;
+            }
+        }
+    }
+
     populateUserInfo(user = null) {
         const userInfo = document.getElementById('user-info');
         if (!userInfo) return;
@@ -731,26 +812,55 @@ class UIManager {
     showAuthError(message) {
         const errorMessage = document.getElementById('auth-error-message');
         if (errorMessage) {
-            // Check if this is a development mode configuration issue
-            const isLocalhost = window.location.hostname === 'localhost' || 
-                              window.location.hostname === '127.0.0.1' ||
-                              window.location.hostname.includes('127.0.0.1');
-            
-            if (isLocalhost && message.includes('not configured')) {
+            // Check if this is an OAuth backend issue
+            if (message.includes('OAuth token exchange requires a backend service')) {
                 errorMessage.innerHTML = `
-                    <p><strong>Development Mode Configuration Issue</strong></p>
-                    <p>${message}</p>
-                    <p><strong>To fix this:</strong></p>
+                    <p><strong>OAuth Authentication Not Available</strong></p>
+                    <p>This static site doesn't have a backend service configured for OAuth token exchange.</p>
+                    <p><strong>Alternative: Use Personal Access Token</strong></p>
                     <ol>
-                        <li>Open <code>assets/js/config.js</code></li>
-                        <li>Ensure <code>development.enabled</code> is <code>true</code></li>
-                        <li>Ensure <code>development.mockOAuth</code> is <code>true</code></li>
-                        <li>Refresh the page</li>
+                        <li>Go to <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=MaterialMap%20Editor" target="_blank">GitHub Settings → Personal Access Tokens</a></li>
+                        <li>Create a new token with <code>public_repo</code> scope</li>
+                        <li>Copy the token and use it in the "Personal Access Token" section above</li>
                     </ol>
-                    <p>Alternatively, set up a real GitHub OAuth App and configure the Client ID.</p>
+                    <p><em>Personal Access Tokens work just as well as OAuth for this application.</em></p>
                 `;
+            } else if (message.includes('development mode configuration')) {
+                const isLocalhost = window.location.hostname === 'localhost' || 
+                                  window.location.hostname === '127.0.0.1' ||
+                                  window.location.hostname.includes('127.0.0.1');
+                
+                if (isLocalhost) {
+                    errorMessage.innerHTML = `
+                        <p><strong>Development Mode Configuration Issue</strong></p>
+                        <p>${message}</p>
+                        <p><strong>To fix this:</strong></p>
+                        <ol>
+                            <li>Open <code>assets/js/config.js</code></li>
+                            <li>Ensure <code>development.enabled</code> is <code>true</code></li>
+                            <li>Ensure <code>development.mockOAuth</code> is <code>true</code></li>
+                            <li>Refresh the page</li>
+                        </ol>
+                        <p>Alternatively, use a Personal Access Token instead.</p>
+                    `;
+                } else {
+                    errorMessage.innerHTML = `
+                        <p><strong>Authentication Error</strong></p>
+                        <p>${message}</p>
+                        <p><strong>Try using a Personal Access Token instead:</strong></p>
+                        <ol>
+                            <li>Create a token at <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=MaterialMap%20Editor" target="_blank">GitHub Settings</a></li>
+                            <li>Use the "Personal Access Token" option above</li>
+                        </ol>
+                    `;
+                }
             } else {
-                errorMessage.textContent = message;
+                // For other errors, show the message as-is but suggest PAT as alternative
+                errorMessage.innerHTML = `
+                    <p><strong>Authentication Error</strong></p>
+                    <p>${escapeHtml(message)}</p>
+                    <p><strong>Alternative:</strong> Try using a Personal Access Token instead of OAuth.</p>
+                `;
             }
         }
         this.showAuthStep('auth-step-error');

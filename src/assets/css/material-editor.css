@@ -657,6 +657,81 @@
     font-size: 0.85em;
 }
 
+/* Personal Access Token Styles */
+.auth-divider {
+    text-align: center;
+    position: relative;
+    margin: 16px 0;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-color, #ddd);
+}
+
+.auth-divider span {
+    background: var(--bg-color, #ffffff);
+    padding: 0 16px;
+    color: var(--text-muted, #666);
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+}
+
+.pat-input-group {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.pat-input-group .form-control {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    background: var(--input-bg, #ffffff);
+    color: var(--text-color, #333);
+}
+
+.pat-input-group .form-control:focus {
+    outline: none;
+    border-color: var(--primary-color, #007bff);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.pat-input-group .form-control::placeholder {
+    color: var(--text-muted, #999);
+    font-family: 'Courier New', monospace;
+}
+
+.pat-input-group .btn {
+    white-space: nowrap;
+    min-width: 100px;
+}
+
+.help-text {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted, #666);
+}
+
+.help-text a {
+    color: var(--primary-color, #007bff);
+    text-decoration: none;
+}
+
+.help-text a:hover {
+    text-decoration: underline;
+}
+
 /* Connection Status */
 .connection-status {
     position: fixed;
