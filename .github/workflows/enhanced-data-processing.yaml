@@ -1,0 +1,274 @@
+name: Enhanced Data Processing
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'data/**/*.yaml'
+      - 'scripts/generate-optimized-data.js'
+  pull_request:
+    branches: [ main ]
+    paths: 
+      - 'data/**/*.yaml'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
+
+jobs:
+  process-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Full history for better change detection
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: 'scripts/package-lock.json'
+
+    - name: Install dependencies
+      working-directory: ./scripts
+      run: |
+        if [ -f package.json ]; then
+          npm ci
+        else
+          npm init -y
+          npm install js-yaml
+        fi
+
+    - name: Validate YAML files
+      run: |
+        echo "🔍 Validating YAML files..."
+        for file in data/*.yaml; do
+          echo "Checking $file..."
+          node -e "
+            const fs = require('fs');
+            const yaml = require('js-yaml');
+            try {
+              const content = fs.readFileSync('$file', 'utf8');
+              const data = yaml.load(content);
+              if (!Array.isArray(data)) {
+                throw new Error('YAML must contain an array of materials');
+              }
+              console.log('✅ $file is valid');
+            } catch (error) {
+              console.error('❌ $file validation failed:', error.message);
+              process.exit(1);
+            }
+          "
+        done
+
+    - name: Generate optimized data files
+      run: |
+        echo "🚀 Generating optimized data files..."
+        node scripts/generate-optimized-data.js
+
+    - name: Verify generated files
+      run: |
+        echo "🔍 Verifying generated files..."
+        
+        # Check if all expected files exist
+        expected_files=(
+          "dist/materials.json"
+          "dist/materials-min.json"
+          "dist/search-index.json"
+          "dist/categories.json"
+          "dist/file-list.json"
+        )
+        
+        for file in "${expected_files[@]}"; do
+          if [ -f "$file" ]; then
+            size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null)
+            echo "✅ $file exists (${size} bytes)"
+          else
+            echo "❌ $file is missing"
+            exit 1
+          fi
+        done
+        
+        # Validate JSON structure
+        echo "🔍 Validating JSON structure..."
+        node -e "
+          const fs = require('fs');
+          const files = ['dist/materials.json', 'dist/search-index.json', 'dist/categories.json'];
+          
+          for (const file of files) {
+            try {
+              const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+              console.log(\`✅ \${file} is valid JSON\`);
+              
+              if (file === 'dist/materials.json') {
+                console.log(\`   Materials count: \${data.materials.length}\`);
+                console.log(\`   Categories: \${data.metadata.categories.length}\`);
+                console.log(\`   Generated at: \${data.metadata.generatedAt}\`);
+              }
+            } catch (error) {
+              console.error(\`❌ \${file} JSON validation failed:\`, error.message);
+              process.exit(1);
+            }
+          }
+        "
+
+    - name: Generate build report
+      run: |
+        echo "📊 Build Report" > build-report.md
+        echo "===============" >> build-report.md
+        echo "" >> build-report.md
+        echo "**Generated at:** $(date)" >> build-report.md
+        echo "**Commit:** ${{ github.sha }}" >> build-report.md
+        echo "" >> build-report.md
+        
+        # File statistics
+        echo "## File Statistics" >> build-report.md
+        echo "" >> build-report.md
+        echo "| File | Size | Description |" >> build-report.md
+        echo "|------|------|-------------|" >> build-report.md
+        
+        for file in dist/*.json; do
+          if [ -f "$file" ]; then
+            size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null)
+            size_kb=$((size / 1024))
+            filename=$(basename "$file")
+            
+            case "$filename" in
+              "materials.json") desc="Full dataset with metadata" ;;
+              "materials-min.json") desc="Minified production dataset" ;;
+              "search-index.json") desc="Optimized search index" ;;
+              "categories.json") desc="Categories and filters" ;;
+              "file-list.json") desc="Legacy file list" ;;
+              *) desc="Generated file" ;;
+            esac
+            
+            echo "| $filename | ${size_kb}KB | $desc |" >> build-report.md
+          fi
+        done
+        
+        # Material statistics from JSON
+        echo "" >> build-report.md
+        echo "## Material Statistics" >> build-report.md
+        echo "" >> build-report.md
+        
+        node -e "
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('dist/materials.json', 'utf8'));
+          
+          console.log(\`**Total Materials:** \${data.materials.length}\`);
+          console.log(\`**Source Files:** \${data.metadata.totalFiles}\`);
+          console.log(\`**Categories:** \${data.metadata.categories.length}\`);
+          console.log(\`**Tags:** \${data.metadata.tags.length}\`);
+          console.log(\`**Material Types:** \${data.metadata.materialTypes.length}\`);
+        " >> build-report.md
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: processed-data
+        path: |
+          dist/
+          build-report.md
+        retention-days: 30
+
+    - name: Commit and push changes
+      if: github.event_name != 'pull_request'
+      run: |
+        git config --local user.name "GitHub Actions"
+        git config --local user.email "actions@github.com"
+        
+        # Add generated files
+        git add dist/
+        
+        # Check if there are changes
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "🤖 Update processed data files [skip ci]
+          
+          - Generated from commit ${{ github.sha }}
+          - $(date)
+          - $(node -e "const data=JSON.parse(require('fs').readFileSync('dist/materials.json','utf8')); console.log(data.materials.length + ' materials processed');")"
+          
+          git push origin main
+        fi
+
+    - name: Comment on PR (if applicable)
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          // Read build report
+          let report = '';
+          try {
+            report = fs.readFileSync('build-report.md', 'utf8');
+          } catch (error) {
+            report = 'Build report not available';
+          }
+          
+          // Create comment
+          const comment = `## 🤖 Data Processing Results
+          
+          The data processing workflow has completed successfully!
+          
+          ${report}
+          
+          ### Next Steps
+          - Review the generated files in the artifacts
+          - Verify material data accuracy
+          - Test the updated website functionality
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+  # Optional: Deploy preview for PRs
+  deploy-preview:
+    if: github.event_name == 'pull_request'
+    needs: process-data
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Download processed data
+      uses: actions/download-artifact@v4
+      with:
+        name: processed-data
+        path: ./
+        
+    - name: Deploy to GitHub Pages (Preview)
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        destination_dir: preview/pr-${{ github.event.number }}
+        
+    - name: Comment preview link
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const comment = `## 🔍 Preview Deployment
+          
+          Your changes have been deployed to a preview environment:
+          
+          **Preview URL:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/preview/pr-${{ github.event.number }}/
+          
+          This preview will be available until the PR is closed.
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

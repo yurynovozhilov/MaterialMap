@@ -4,10 +4,16 @@
   "description": "Material MAP - Library of material model parameter sets for LS-DYNA",
 
   "scripts": {
+    "build": "node generate-optimized-data.js",
+    "validate": "node validate-yaml.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "serve": "python3 serve.py"
+    "serve": "python3 serve.py",
+    "dev": "node generate-optimized-data.js && echo 'Data processing completed'"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
