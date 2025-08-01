@@ -92,7 +92,8 @@
                 console.log('OAuth callback received:', {
                     code: code ? 'present' : 'missing',
                     error: error,
-                    state: state ? 'present' : 'missing'
+                    state: state ? 'present' : 'missing',
+                    url: window.location.href
                 });
 
                 if (error) {
@@ -102,6 +103,12 @@
 
                 if (!code) {
                     this.handleError('missing_code', 'Authorization code not received from GitHub');
+                    return;
+                }
+
+                if (!state) {
+                    console.error('OAuth state parameter missing from GitHub callback');
+                    this.handleError('missing_state', 'OAuth state parameter missing - authentication failed. This is a security requirement to prevent CSRF attacks.');
                     return;
                 }
 

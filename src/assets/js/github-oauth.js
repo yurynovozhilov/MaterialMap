@@ -105,18 +105,39 @@ class GitHubOAuth {
             
             // Generate and store state for CSRF protection
             const state = this.generateState();
+            const timestamp = Date.now().toString();
             
-            // Store new state
-            sessionStorage.setItem('github_oauth_state', state);
-            sessionStorage.setItem('github_oauth_client_id', this.clientId);
-            
-            // Add timestamp for debugging
-            sessionStorage.setItem('github_oauth_timestamp', Date.now().toString());
-            
-            console.log('OAuth state generated and stored:', {
-                state: state.substring(0, 8) + '...',
-                timestamp: Date.now()
-            });
+            // Store new state with multiple fallback mechanisms
+            try {
+                sessionStorage.setItem('github_oauth_state', state);
+                sessionStorage.setItem('github_oauth_client_id', this.clientId);
+                sessionStorage.setItem('github_oauth_timestamp', timestamp);
+                
+                // Verify storage worked
+                const verifyState = sessionStorage.getItem('github_oauth_state');
+                if (verifyState !== state) {
+                    throw new Error('Session storage verification failed');
+                }
+                
+                console.log('OAuth state generated and stored:', {
+                    state: state.substring(0, 8) + '...',
+                    timestamp: timestamp,
+                    verified: true
+                });
+                
+            } catch (storageError) {
+                console.error('Session storage failed:', storageError);
+                
+                // Fallback: try localStorage
+                try {
+                    localStorage.setItem('github_oauth_state_fallback', state);
+                    localStorage.setItem('github_oauth_timestamp_fallback', timestamp);
+                    console.warn('Using localStorage fallback for OAuth state');
+                } catch (localStorageError) {
+                    console.error('Both session and local storage failed:', localStorageError);
+                    throw new Error('Unable to store OAuth state - browser storage may be disabled or full. Please check your browser settings and try again.');
+                }
+            }
 
             // Build authorization URL
             const params = new URLSearchParams({
@@ -200,25 +221,86 @@ class GitHubOAuth {
      */
     async handleOAuthSuccess(data) {
         try {
-            // Verify state matches
-            const storedState = sessionStorage.getItem('github_oauth_state');
+            // Verify state matches - check both sessionStorage and localStorage fallback
+            let storedState = sessionStorage.getItem('github_oauth_state');
+            let storedTimestamp = sessionStorage.getItem('github_oauth_timestamp');
+            let usingFallback = false;
+            
+            // If not found in sessionStorage, check localStorage fallback
+            if (!storedState) {
+                storedState = localStorage.getItem('github_oauth_state_fallback');
+                storedTimestamp = localStorage.getItem('github_oauth_timestamp_fallback');
+                usingFallback = true;
+                
+                if (storedState) {
+                    console.log('Using localStorage fallback for OAuth state verification');
+                }
+            }
+            
             console.log('OAuth state verification:', {
-                received: data.state,
-                stored: storedState,
+                received: data.state ? data.state.substring(0, 8) + '...' : 'missing',
+                stored: storedState ? storedState.substring(0, 8) + '...' : 'missing',
+                timestamp: storedTimestamp,
+                usingFallback: usingFallback,
                 match: data.state === storedState
             });
             
             // Enhanced state verification with better error handling
-            if (!data.state || !storedState) {
-                console.error('OAuth state missing:', { received: data.state, stored: storedState });
-                throw new Error('OAuth state parameter missing - authentication failed');
+            if (!data.state) {
+                console.error('OAuth state missing from callback:', { 
+                    received: data.state, 
+                    stored: storedState ? 'present' : 'missing',
+                    url: window.location.href 
+                });
+                throw new Error('OAuth state parameter missing from GitHub callback - authentication failed. Please try again.');
+            }
+            
+            if (!storedState) {
+                console.error('OAuth state missing from storage:', { 
+                    received: data.state ? 'present' : 'missing', 
+                    stored: storedState,
+                    timestamp: storedTimestamp,
+                    sessionStorageLength: sessionStorage.length
+                });
+                
+                // Check if state was lost due to session storage issues
+                const allKeys = [];
+                for (let i = 0; i < sessionStorage.length; i++) {
+                    allKeys.push(sessionStorage.key(i));
+                }
+                console.log('Available session storage keys:', allKeys);
+                
+                throw new Error('OAuth state lost from browser storage - authentication failed. This may be due to browser security settings or storage limitations. Please try again.');
             }
             
             if (data.state !== storedState) {
-                console.error('OAuth state mismatch:', { received: data.state, stored: storedState });
-                // Clear potentially corrupted state
+                console.error('OAuth state mismatch:', { 
+                    received: data.state.substring(0, 8) + '...', 
+                    stored: storedState.substring(0, 8) + '...',
+                    receivedLength: data.state.length,
+                    storedLength: storedState.length,
+                    timestamp: storedTimestamp
+                });
+                
+                // Clear potentially corrupted state from both storage locations
                 sessionStorage.removeItem('github_oauth_state');
-                throw new Error('Invalid state parameter - CSRF protection failed. Please try again.');
+                sessionStorage.removeItem('github_oauth_timestamp');
+                localStorage.removeItem('github_oauth_state_fallback');
+                localStorage.removeItem('github_oauth_timestamp_fallback');
+                throw new Error('Invalid state parameter - CSRF protection failed. The authentication request may have expired or been tampered with. Please try again.');
+            }
+            
+            // Check if the state is too old (older than 10 minutes)
+            if (storedTimestamp) {
+                const stateAge = Date.now() - parseInt(storedTimestamp);
+                const maxAge = 10 * 60 * 1000; // 10 minutes
+                if (stateAge > maxAge) {
+                    console.warn('OAuth state is old:', { 
+                        age: Math.round(stateAge / 1000), 
+                        maxAge: Math.round(maxAge / 1000) 
+                    });
+                    // Don't fail for old state, just warn - GitHub's OAuth flow can sometimes be slow
+                }
             }
 
             // Exchange code for access token
@@ -267,7 +349,7 @@ class GitHubOAuth {
         // Regular cleanup
         this.cleanupOAuthState();
         
-        // Additional cleanup for potential conflicts
+        // Additional cleanup for potential conflicts in sessionStorage
         try {
             const keysToRemove = [];
             for (let i = 0; i < sessionStorage.length; i++) {
@@ -278,7 +360,15 @@ class GitHubOAuth {
             }
             keysToRemove.forEach(key => sessionStorage.removeItem(key));
         } catch (error) {
-            console.warn('Failed to force cleanup OAuth state:', error);
+            console.warn('Failed to force cleanup OAuth state from sessionStorage:', error);
+        }
+        
+        // Also cleanup localStorage fallback
+        try {
+            localStorage.removeItem('github_oauth_state_fallback');
+            localStorage.removeItem('github_oauth_timestamp_fallback');
+        } catch (error) {
+            console.warn('Failed to cleanup OAuth state from localStorage:', error);
         }
     }
 
@@ -470,11 +560,20 @@ class GitHubOAuth {
      * Clean up OAuth state data
      */
     cleanupOAuthState() {
+        // Clean up sessionStorage
         sessionStorage.removeItem('github_oauth_state');
         sessionStorage.removeItem('github_oauth_client_id');
         sessionStorage.removeItem('github_oauth_code');
         sessionStorage.removeItem('github_oauth_timestamp');
         sessionStorage.removeItem('github_oauth_state_conflict');
+        
+        // Clean up localStorage fallback
+        try {
+            localStorage.removeItem('github_oauth_state_fallback');
+            localStorage.removeItem('github_oauth_timestamp_fallback');
+        } catch (error) {
+            console.warn('Failed to cleanup OAuth fallback state:', error);
+        }
     }
 
     /**
