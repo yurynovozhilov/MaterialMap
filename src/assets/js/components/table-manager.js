@@ -110,24 +110,32 @@ class TableManager {
           continue;
         }
 
-        // Create markup for the first column with proper sanitization
+        // Create markup for the first column with proper sanitization - only ID and MAT information
         let materialModelHTML = `<div>${escapeHtml(material.id || "-")}/${escapeHtml(material.mat || "-")}</div>`;
         if (material.mat_add) { materialModelHTML += `<div>${escapeHtml(material.mat_add)}</div>`; }
         if (material.mat_thermal) { materialModelHTML += `<div>${escapeHtml(material.mat_thermal)}</div>`; }
+        
+        // No category badges in Material Model column
 
-        // Add category badge if available
-        if (material.metadata?.category) {
-          materialModelHTML += `<span class="category-badge category-${material.metadata.category}">${escapeHtml(material.metadata.category)}</span>`;
+        // Create applications HTML with proper handling for empty arrays
+        const appArray = material.app || [];
+        let applicationsHTML = "<ul>";
+        if (appArray.length > 0) {
+          applicationsHTML += appArray.map(app => `<li>${escapeHtml(app)}</li>`).join("");
+        } else {
+          applicationsHTML += "<li>-</li>";
         }
+        applicationsHTML += "</ul>";
+
+        // Format date with proper handling for empty values
+        const formattedDate = material.add ? formatDate(material.add) : "N/A";
 
         // Return table rows with proper sanitization
         tableData.push([
           materialModelHTML,
           escapeHtml(material.eos || "-"),
-          `<ul>${(material.app || [])
-            .map((app) => `<li>${escapeHtml(app)}</li>`)
-            .join("")}</ul>`,
-          formatDate(material.add),
+          applicationsHTML,
+          formattedDate,
           material, // Keep material data in hidden column
         ]);
       } catch (error) {

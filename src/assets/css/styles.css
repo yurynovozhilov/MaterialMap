@@ -344,6 +344,39 @@ a:focus {
     margin: var(--spacing-xl) 0;
 }
 
+/* Category badge styles */
+.category-badge {
+    display: inline-block;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+    margin-top: var(--spacing-xs);
+    margin-right: var(--spacing-xs);
+    text-transform: capitalize;
+    color: white;
+}
+
+.category-ceramic {
+    background-color: #3B82F6;
+}
+
+.category-adhesive {
+    background-color: #10B981;
+}
+
+.category-foam {
+    background-color: #F59E0B;
+}
+
+.category-soil {
+    background-color: #8B5A2B;
+}
+
+.category-composite {
+    background-color: #8B5CF6;
+}
+
 #materials-table thead tr {
     background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
 }
