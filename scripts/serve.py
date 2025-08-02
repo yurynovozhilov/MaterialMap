@@ -12,7 +12,16 @@ from pathlib import Path
 # Change to the project root directory (parent of scripts)
 os.chdir(Path(__file__).parent.parent)
 
+# Default port
 PORT = 8080
+
+# Allow port to be specified as command line argument
+if len(sys.argv) > 1:
+    try:
+        PORT = int(sys.argv[1])
+    except ValueError:
+        print(f"Invalid port number: {sys.argv[1]}")
+        sys.exit(1)
 
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -36,7 +45,7 @@ if __name__ == "__main__":
         print("\nServer stopped.")
         sys.exit(0)
     except OSError as e:
-        if e.errno == 48:  # Address already in use
+        if e.errno == 48 or e.errno == 98:  # Address already in use (macOS=48, Linux=98)
             print(f"Port {PORT} is already in use. Try a different port.")
             sys.exit(1)
         else:

@@ -82,6 +82,22 @@ class DataProcessor {
         tags.forEach(tag => this.tags.add(tag));
         this.materialTypes.add(materialType);
 
+        // Get applications from the correct location
+        const applications = [];
+        if (item.app && Array.isArray(item.app)) {
+            applications.push(...item.app);
+        } else if (material.app && Array.isArray(material.app)) {
+            applications.push(...material.app);
+        }
+
+        // Get add date from the correct location
+        let addDate = '';
+        if (item.add) {
+            addDate = item.add;
+        } else if (material.add) {
+            addDate = material.add;
+        }
+
         // Create enhanced material object
         const enhancedMaterial = {
             // Core identification
@@ -98,10 +114,10 @@ class DataProcessor {
             mat_data: material.mat_data ? material.mat_data.trim() : '',
             
             // Applications and metadata
-            app: item.app || [],
-            ref: item.ref || '',
-            url: item.url || '',
-            add: item.add || '',
+            app: applications,
+            ref: item.ref || material.ref || '',
+            url: item.url || material.url || '',
+            add: addDate,
             
             // Enhanced metadata
             metadata: {
