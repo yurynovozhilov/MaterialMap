@@ -111,27 +111,55 @@
             // Register service worker for caching and offline functionality
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./src/assets/js/service-worker.js')
+                    navigator.serviceWorker.register('./src/assets/js/service-worker-new.js')
                         .then((registration) => {
-                            console.log('SW registered: ', registration);
+                            console.log('Service Worker registered successfully:', registration.scope);
+                            
+                            // Check for updates
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing;
+                                console.log('Service Worker update found!');
+                                
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        // New content is available, show notification
+                                        if (window.notify) {
+                                            window.notify.info('New version available! Refresh to update.', 10000);
+                                        }
+                                    }
+                                });
+                            });
                         })
-                        .catch((registrationError) => {
-                            console.log('SW registration failed: ', registrationError);
+                        .catch((error) => {
+                            console.error('Service Worker registration failed:', error);
                         });
+                });
+                
+                // Handle controller change (when new SW takes over)
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    console.log('New Service Worker controller activated');
                 });
             }
         </script>
 
+        <!-- Utilities -->
+        <script src="src/assets/js/utils/path-utils.js" type="module"></script>
+        <script src="src/assets/js/utils/string-utils.js" type="module"></script>
+        <script src="src/assets/js/utils/network-utils.js" type="module"></script>
+        
+        <!-- Components -->
+        <script src="src/assets/js/components/notification-system.js" type="module"></script>
+        <script src="src/assets/js/components/loading-manager.js" type="module"></script>
+        <script src="src/assets/js/components/table-manager.js" type="module"></script>
+        
+        <!-- Services -->
+        <script src="src/assets/js/services/yaml-parser.js" type="module"></script>
+        <script src="src/assets/js/services/data-loader.js" type="module"></script>
+        
         <!-- Configuration -->
         <script src="src/assets/js/config.js"></script>
         
-        <!-- Enhanced Data Loading -->
-        <script src="src/assets/js/enhanced-data-loader.js"></script>
-        <script src="src/assets/js/data-loader-integration.js"></script>
-        
-
-        
         <!-- Main Script -->
-        <script src="src/assets/js/scripts.js"></script>
+        <script src="src/assets/js/main.js" type="module"></script>
     </body>
 </html>

@@ -25,25 +25,36 @@ All site data is stored in multiple YAML files in the `data` directory, allowing
 ```
 MaterialMap/
 ├── index.html              # Main application entry point
-├── README.md              # Project documentation
-├── manifest.json          # PWA manifest
-├── .gitignore            # Git ignore rules
-├── .htaccess             # Web server configuration
-├── src/                  # Source code
-│   ├── assets/           # Static assets
-│   │   ├── css/         # Stylesheets
-│   │   ├── js/          # JavaScript modules
-│   │   └── html/        # HTML components
-│   └── config/          # Configuration files
-├── data/                # Material model data (YAML files)
-├── docs/                # Project documentation
-├── tests/               # Unit and integration tests
-├── scripts/             # Development and build scripts
-│   ├── serve.py         # Development server
-│   ├── run-tests.sh     # Test runner
-│   └── *.html           # Test pages
-├── dist/                # Generated files
-└── .github/             # GitHub workflows
+├── README.md               # Project documentation
+├── manifest.json           # PWA manifest
+├── .gitignore              # Git ignore rules
+├── .htaccess               # Web server configuration
+├── src/                    # Source code
+│   ├── assets/             # Static assets
+│   │   ├── css/            # Stylesheets
+│   │   ├── js/             # JavaScript modules
+│   │   │   ├── components/ # UI components
+│   │   │   ├── services/   # Data services
+│   │   │   ├── utils/      # Utility functions
+│   │   │   ├── config.js   # Configuration
+│   │   │   ├── main.js     # Main application logic
+│   │   │   └── service-worker-new.js # Service worker
+│   │   └── html/           # HTML components
+│   └── config/             # Configuration files
+├── data/                   # Material model data (YAML files)
+├── docs/                   # Project documentation
+├── tests/                  # Unit and integration tests
+├── scripts/                # Development and build scripts
+│   ├── serve.py            # Development server
+│   ├── run-tests.sh        # Test runner
+│   └── *.html              # Test pages
+├── dist/                   # Generated files
+│   ├── file-list.json      # List of material files
+│   ├── materials.json      # Complete materials data
+│   ├── materials-min.json  # Minimized materials data
+│   ├── search-index.json   # Search index
+│   └── categories.json     # Material categories
+└── .github/                # GitHub workflows
 ```
 
 ## Quick Start
@@ -109,19 +120,29 @@ For detailed information, please see:
 - [Error Handling Improvements](docs/ERROR_HANDLING_IMPROVEMENTS.md)
 - [Material Editor System](docs/MATERIAL_EDITOR.md)
 
-## Project Structure
+## Application Architecture
 
-```
-├── index.html              # Main application entry point
-├── assets/                 # Static resources
-│   ├── css/               # Stylesheets
-│   ├── js/                # JavaScript files
-│   └── html/              # Additional HTML pages
-├── config/                # Configuration files
-├── data/                  # Material model YAML files
-├── dist/                  # Generated files
-└── docs/                  # Documentation
-```
+The application follows a modular architecture with these key components:
+
+1. **Utilities**: Common functions for string manipulation, network requests, etc.
+   - `path-utils.js`: Path resolution and URL handling
+   - `string-utils.js`: String manipulation, HTML escaping, date formatting
+   - `network-utils.js`: Enhanced fetch with retry, timeout, and error handling
+
+2. **Components**: UI components like notifications, loading indicators, etc.
+   - `notification-system.js`: Unified notification system
+   - `loading-manager.js`: Loading state and progress tracking
+   - `table-manager.js`: DataTable initialization and interactions
+
+3. **Services**: Data loading, parsing, and processing services
+   - `data-loader.js`: Material data loading with caching and offline support
+   - `yaml-parser.js`: YAML parsing with validation
+
+4. **Main Application**: Orchestrates the components and services
+   - `main.js`: Application initialization and theme management
+   - `service-worker-new.js`: Offline support and caching using Workbox
+
+This modular approach improves maintainability, reduces duplication, and makes the codebase easier to understand and extend.
 
 ## Contributing
 
